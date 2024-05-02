@@ -9,9 +9,7 @@ class IconTextBox extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Ink(
-      decoration: BoxDecoration(
-
-      ),
+      decoration: const BoxDecoration(),
       child: InkWell(
         onTap: onTap,
         child: Row(

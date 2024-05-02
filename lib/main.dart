@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:elibrary/init_affairs.dart';
+import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/theme_prov.dart';
@@ -37,10 +38,13 @@ class _MyAppState extends State<MyApp>{
           providers: ProvManager.widgets(),
           child: Consumer<ThemeProv>(
             builder:(context,prov,_)=>MaterialApp(
+              routes: {
+                '/book_detail':(context)=>const BookDetail(),
+              },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,
               themeMode: prov.mode,
-              home: MainTabsPage(),
+              home: const MainTabsPage(),
             ),
           )
       ),

@@ -21,9 +21,9 @@ Future<void> initAsync() async{
 void generalUIInit(Brightness b){
   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
     statusBarBrightness: b,
-    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.black,
     systemNavigationBarIconBrightness: b==Brightness.light?Brightness.dark:Brightness.light,
     systemNavigationBarDividerColor: Colors.transparent,
   );

@@ -51,6 +51,7 @@ class ImageTile extends StatelessWidget{
             Text(
               title!,
               style: TextStyle(
+                fontWeight: FontWeight.normal,
                 color: surfaceColor,
                 fontSize: fontSize,
               ),
@@ -73,7 +74,13 @@ class ImageTile extends StatelessWidget{
               ),
           ],
         ),
-        if(actionWidget!=null)actionWidget!,
+        if(actionWidget!=null)
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: actionWidget,
+            ),
+          ),
       ],
     );
   }

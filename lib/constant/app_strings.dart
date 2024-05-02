@@ -19,8 +19,19 @@ class AppStrs{
 
   static const publicSpec='公开向所有读者';
 
-  static const editProfile='编辑资料';
+  static const editProfile='编辑';
   static const star='收藏';
   static const history='历史';
+  static const query='借阅请求';
+
+  static const accountSecurity='账户安全';
+  static const myReservations='我的预约';
+  static const myBorrowed='借阅记录';
+  static const myFines='信用记录';
+  static const settings='设置';
   static const moreSetting='更多设置';
+  static const appearance='外观';
+
+  static const readOnline='在线阅读';
+  static const toBorrow='借阅';
 }

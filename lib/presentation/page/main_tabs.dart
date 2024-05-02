@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../style/app_colors.dart';
+import 'book_detail.dart';
 import 'book_shelf.dart';
 
 class MainTabsPage extends StatefulWidget{
@@ -56,20 +57,20 @@ class _MaintabsState extends State<MainTabsPage> with SingleTickerProviderStateM
               },
               tabs:const [
                 GButton(
-                    icon: Icons.home_outlined,
-                    text: AppStrs.home
+                  icon: Icons.home_outlined,
+                  text: AppStrs.home,
                 ),
                 GButton(
-                    icon: Icons.search,
-                    text: AppStrs.search
+                  icon: Icons.search,
+                  text: AppStrs.search
                 ),
                 GButton(
-                    icon: CupertinoIcons.rectangle_stack,
-                    text: AppStrs.own_lib
+                  icon: CupertinoIcons.rectangle_stack,
+                  text: AppStrs.own_lib
                 ),
                 GButton(
-                    icon: CupertinoIcons.person,
-                    text: AppStrs.profile
+                  icon: CupertinoIcons.person,
+                  text: AppStrs.profile
                 ),
               ],
           ),

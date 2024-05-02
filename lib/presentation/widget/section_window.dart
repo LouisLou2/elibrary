@@ -1,3 +1,4 @@
+import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,7 @@ class SectionWindow extends StatelessWidget{
   final VoidCallback? actionOnTap;
   final List<Widget>widgets;
   final double? fontSize;
-  SectionWindow({super.key, required this.title,required this.actionText,this.actionOnTap,required this.widgets,this.fontSize,this.titleOnTap});
+  const SectionWindow({super.key, required this.title,required this.actionText,this.actionOnTap,required this.widgets,this.fontSize,this.titleOnTap});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,13 +30,7 @@ class SectionWindow extends StatelessWidget{
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 8),
             child: TextActionWidget(
-              text: Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              text:SpecTextWidget.mediumTitle(title, context),
               size: fontSize,
               onTap: titleOnTap,
             ),

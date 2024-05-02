@@ -1,3 +1,4 @@
+import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
 import 'package:elibrary/presentation/widget/gradient_image_card.dart';
 import 'package:elibrary/presentation/widget/section_window.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
@@ -130,13 +131,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 4),
                 child: TextActionWidget(
-                  text: Text(
-                    AppStrs.trending,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontSize: 22,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
+                  text: SpecTextWidget.mediumTitle(AppStrs.trending, context),
                   size: 22,
                   onTap: (){},
                 ),
@@ -153,8 +148,8 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                       image: Image.network(
                         'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                         fit: BoxFit.cover,
-                        width: 123,
-                        height: 123,
+                        width: 100,
+                        height: 120,
                       ),
                       actionWidget: null,
                       fontSize: 20,
