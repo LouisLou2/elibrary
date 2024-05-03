@@ -41,7 +41,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
                     child: IconButton(
-                      onPressed: null,
+                      onPressed: ()=>Navigator.of(context).pushNamed('/reservation_detail'),
                       icon: Icon(
                         Icons.notifications_active_outlined,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -66,6 +66,21 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                   builder: (BuildContext context,SearchController controller){
                     return SearchBar(
                       controller: controller,
+                      hintText: '搜索书名, 作者, 出版社',
+                      hintStyle: Theme.of(context).textTheme.titleSmall!=null? MaterialStatePropertyAll<TextStyle>(
+                        Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                      ):null,
+                      side: MaterialStatePropertyAll<BorderSide>(
+                        BorderSide(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                      ),
+                      shadowColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
+                      backgroundColor: MaterialStatePropertyAll<Color>(Theme.of(context).colorScheme.primary.withOpacity(0.18)),
+                      surfaceTintColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
                       padding: const MaterialStatePropertyAll<EdgeInsets>(
                         EdgeInsets.symmetric(horizontal: 16.0),
                       ),

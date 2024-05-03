@@ -31,9 +31,9 @@ class _BookShelfState extends State<BookShelf> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+                    padding:const EdgeInsets.symmetric(horizontal: 12,vertical: 0),
                     child: IconButton(
-                      onPressed: null,
+                      onPressed: ()=>Navigator.of(context).pushNamed('/record'),
                       icon: Icon(
                         Icons.more_vert,
                         color: Theme.of(context).colorScheme.onSurface,

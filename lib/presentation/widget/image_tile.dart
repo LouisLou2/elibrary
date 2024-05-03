@@ -52,6 +52,7 @@ class ImageTile extends StatelessWidget{
               title!,
               style: TextStyle(
                 fontWeight: FontWeight.normal,
+                letterSpacing: -0.6,
                 color: surfaceColor,
                 fontSize: fontSize,
               ),
@@ -62,6 +63,7 @@ class ImageTile extends StatelessWidget{
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: fontSize!=null?fontSize!*0.7:null,
+                  letterSpacing: -0.6,
                 ),
               ),
             if(thirdTitle!=null)

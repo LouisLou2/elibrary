@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
+import 'package:elibrary/presentation/page/record_page.dart';
+import 'package:elibrary/presentation/page/reservation_detail.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
@@ -40,6 +42,8 @@ class _MyAppState extends State<MyApp>{
             builder:(context,prov,_)=>MaterialApp(
               routes: {
                 '/book_detail':(context)=>const BookDetail(),
+                '/reservation_detail': (context) => const ReservationDetail(),
+                '/record':(context)=>const RecordPage(),
               },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,

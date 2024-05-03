@@ -45,34 +45,35 @@ class _MaintabsState extends State<MainTabsPage> with SingleTickerProviderStateM
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
           child: GNav(
-              backgroundColor: AppColors.darkBarColor,
-              color: Colors.white,
-              activeColor: Colors.white,
-              tabBackgroundColor: AppColors.darkgrey,
-              padding: const EdgeInsets.all(10),
-              gap:8,
-              onTabChange: (index){
-                _controller.jumpToPage(index);
-                print(index);
-              },
-              tabs:const [
-                GButton(
-                  icon: Icons.home_outlined,
-                  text: AppStrs.home,
-                ),
-                GButton(
-                  icon: Icons.search,
-                  text: AppStrs.search
-                ),
-                GButton(
-                  icon: CupertinoIcons.rectangle_stack,
-                  text: AppStrs.own_lib
-                ),
-                GButton(
-                  icon: CupertinoIcons.person,
-                  text: AppStrs.profile
-                ),
-              ],
+            duration: const Duration(milliseconds: 300),
+            backgroundColor: AppColors.darkBarColor,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: AppColors.darkgrey,
+            padding: const EdgeInsets.all(10),
+            gap:8,
+            onTabChange: (index){
+              _controller.jumpToPage(index);
+              print(index);
+            },
+            tabs:const [
+              GButton(
+                icon: Icons.home_outlined,
+                text: AppStrs.home,
+              ),
+              GButton(
+                icon: Icons.search,
+                text: AppStrs.search
+              ),
+              GButton(
+                icon: CupertinoIcons.rectangle_stack,
+                text: AppStrs.own_lib
+              ),
+              GButton(
+                icon: CupertinoIcons.person,
+                text: AppStrs.profile
+              ),
+            ],
           ),
         ),
       )

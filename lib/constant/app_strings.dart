@@ -34,4 +34,5 @@ class AppStrs{
 
   static const readOnline='在线阅读';
   static const toBorrow='借阅';
+  static const reservationDetail='预约详情';
 }

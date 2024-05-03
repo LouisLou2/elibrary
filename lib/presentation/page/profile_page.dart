@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: null,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child:Column(
             children:[
               Row(
