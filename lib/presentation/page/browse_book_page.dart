@@ -21,9 +21,20 @@ class BrowseBookPage extends StatefulWidget {
 class _BrowseBookPageState extends State<BrowseBookPage> {
 
   late SearchController _searchController;
+  late FocusNode _focusNode;
+
   @override
   void initState() {
     _searchController = SearchController();
+    _focusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
     super.initState();
   }
 
@@ -61,65 +72,54 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
               const SizedBox(height: UIParams.mediumGap),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 0),
-                child: SearchAnchor(
-                  searchController: _searchController,
-                  builder: (BuildContext context,SearchController controller){
-                    return SearchBar(
-                      controller: controller,
-                      hintText: '搜索书名, 作者, 出版社',
-                      hintStyle: Theme.of(context).textTheme.titleSmall!=null? MaterialStatePropertyAll<TextStyle>(
-                        Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                        ),
-                      ):null,
-                      side: MaterialStatePropertyAll<BorderSide>(
-                        BorderSide(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                          width: 1.5,
+                child: Hero(
+                  tag: 'browsePage:searchBar',
+                  child: SearchBar(
+                    controller: _searchController,
+                    autoFocus: false,
+                    focusNode: _focusNode,
+                    hintText: '搜索书名, 作者, 出版社',
+                    hintStyle: Theme.of(context).textTheme.titleSmall!=null? MaterialStatePropertyAll<TextStyle>(
+                      Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                      ),
+                    ):null,
+                    side: MaterialStatePropertyAll<BorderSide>(
+                      BorderSide(
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                        width: 1.5,
+                      ),
+                    ),
+                    shadowColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
+                    backgroundColor: MaterialStatePropertyAll<Color>(Theme.of(context).colorScheme.primary.withOpacity(0.18)),
+                    surfaceTintColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
+                    padding: const MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 16.0),
+                    ),
+                    elevation: const MaterialStatePropertyAll<double>(3.0),
+                    shape: MaterialStatePropertyAll<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(UIParams.defBorderR),
+                      ),
+                    ),
+                    onTap: (){
+                      Navigator.of(context).pushNamed('/search');
+                      _focusNode.unfocus();
+                      print('@@@@@@@@@@@@onTap');
+                    },
+                    onChanged: (_){
+                      print('@@@@@@@@@@@@onChanged');
+                    },
+                    leading: const Icon(Icons.search),
+                    trailing: <Widget>[
+                      Tooltip(
+                        message: 'Search by scanning barcode',
+                        child: IconButton(
+                          icon: const Icon(Icons.document_scanner_outlined), onPressed: () {  },
                         ),
                       ),
-                      shadowColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
-                      backgroundColor: MaterialStatePropertyAll<Color>(Theme.of(context).colorScheme.primary.withOpacity(0.18)),
-                      surfaceTintColor: const MaterialStatePropertyAll<Color>(Colors.transparent),
-                      padding: const MaterialStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 16.0),
-                      ),
-                      elevation: const MaterialStatePropertyAll<double>(3.0),
-                      shape: MaterialStatePropertyAll<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(UIParams.defBorderR),
-                        ),
-                      ),
-                      onTap: (){
-                        print('@@@@@@@@@@@@onTap');
-                        controller.openView();
-                      },
-                      onChanged: (_){
-                        print('@@@@@@@@@@@@onChanged');
-                        controller.openView();
-                      },
-                      leading: const Icon(Icons.search),
-                      trailing: <Widget>[
-                        Tooltip(
-                          message: 'Change brightness mode',
-                          child: IconButton(
-                            icon: const Icon(Icons.document_scanner_outlined), onPressed: () {  },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                  suggestionsBuilder: (BuildContext context,SearchController controller){
-                    return List<ListTile>.generate(5, (int index){
-                      final String item = 'item $index';
-                      return ListTile(
-                        title: Text(item),
-                        onTap: (){
-                          controller.closeView(item);
-                        },
-                      );
-                    });
-                  },
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: UIParams.mediumGap),

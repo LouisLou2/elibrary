@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../constant/app_strings.dart';
 import '../widget/custom_image_card.dart';
@@ -24,6 +25,7 @@ class _BookShelfState extends State<BookShelf> {
   final GlobalKey<TooltipState> tooltipkey=GlobalKey<TooltipState>();
   bool _isSelectionMode = false;
   List<bool> _isSelected = List.generate(20, (_) => false);
+  String result = '';
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +40,24 @@ class _BookShelfState extends State<BookShelf> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
                     child: IconButton(
-                      onPressed: ()=>showCupertinoModalBottomSheet(
-                        context: context,
-                        builder: (context) => CupertinoSharePage(),
-                      ),
+                      onPressed: ()async{
+                        var res = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SimpleBarcodeScannerPage(
+                                appBarTitle: '扫描图书条码',
+                                centerTitle: true,
+                                isShowFlashIcon: true,
+                              ),
+                            )
+                          );
+                          setState(() {
+                          if (res is String) {
+                            result = res;
+                            print(result);
+                          }
+                        });
+                      },
                       icon: Icon(
                         Icons.add,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -55,6 +71,12 @@ class _BookShelfState extends State<BookShelf> {
                         onPressed: ()=>showPullDownMenu(
                         context: context,
                         items: [
+                          PullDownMenuItem(
+                            onTap: () {},
+                            title: '添加',
+                            icon: CupertinoIcons.add,
+                            iconColor: Theme.of(context).colorScheme.primary,
+                          ),
                           PullDownMenuItem(
                             onTap: () {},
                             title: '编辑',

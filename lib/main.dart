@@ -7,6 +7,7 @@ import 'package:elibrary/presentation/page/booking_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record_page.dart';
 import 'package:elibrary/presentation/page/reservation_detail.dart';
+import 'package:elibrary/presentation/page/search_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp>{
                 '/reservation_detail': (context) => const ReservationDetail(),
                 '/record':(context)=>const RecordPage(),
                 '/booking':(context)=>const BookingPage(),
+                '/search':(context)=>const SearchPage(),
               },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,

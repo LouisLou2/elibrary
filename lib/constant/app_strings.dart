@@ -24,6 +24,8 @@ class AppStrs{
   static const history='历史';
   static const query='借阅请求';
 
+  static const searchHistory='搜索历史';
+
   static const accountSecurity='账户安全';
   static const myReservations='我的预约';
   static const myBorrowed='借阅记录';

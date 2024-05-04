@@ -137,14 +137,17 @@ class _BookDetailState extends State<BookDetail>{
                         ),
                       ],
                     ),
-                    child: ClipRRect(
-                      clipBehavior: Clip.antiAlias,
-                      borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-                      child: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 200,
+                    child: Hero(
+                      tag: 'bookCover',
+                      child: ClipRRect(
+                        clipBehavior: Clip.antiAlias,
+                        borderRadius: BorderRadius.circular(UIParams.smallBorderR),
+                        child: Image.network(
+                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                          fit: BoxFit.cover,
+                          width: 150,
+                          height: 200,
+                        ),
                       ),
                     ),
                   ),
