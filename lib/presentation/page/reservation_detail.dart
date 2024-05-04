@@ -1,4 +1,3 @@
-import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -191,7 +190,7 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '预约时间',
+                                              '取书期限',
                                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),

@@ -7,7 +7,7 @@ class UIParams{
   static const double defBorderR=8;
   static const double defPadding=10;
   static const double bigBorderR=20;
-  static const double smallBorderR=8;
+  static const double smallBorderR=6;
   static const double tinyBorderR=4;
   static const double defAvatarBorderW=3.0;
   static const double defSmallAvatarR=8;

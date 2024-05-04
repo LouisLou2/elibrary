@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
+import 'package:elibrary/presentation/page/booking_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record_page.dart';
 import 'package:elibrary/presentation/page/reservation_detail.dart';
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp>{
                 '/book_detail':(context)=>const BookDetail(),
                 '/reservation_detail': (context) => const ReservationDetail(),
                 '/record':(context)=>const RecordPage(),
+                '/booking':(context)=>const BookingPage(),
               },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,

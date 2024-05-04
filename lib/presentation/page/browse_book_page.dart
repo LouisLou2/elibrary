@@ -156,18 +156,23 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                 child:Column(
                   children: ListExtension.separate(
                     6,
-                        (index)=>ImageTile(
-                      title: 'Dart Apprentice',
-                      subTitle: 'Leo Dion, Peter Friese',
-                      thirdTitle: '2021-12-3',
-                      image: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 120,
+                    (index)=>GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: ()=>Navigator.of(context).pushNamed('/book_detail'),
+                      child: ImageTile(
+                        title: 'Dart Apprentice',
+                        subTitle: 'Leo Dion, Peter Friese',
+                        thirdTitle: 'Programming',
+                        subtitleColor: Theme.of(context).colorScheme.primary,
+                        image: Image.network(
+                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 120,
+                        ),
+                        actionWidget: null,
+                        fontSize: 20,
                       ),
-                      actionWidget: null,
-                      fontSize: 20,
                     ),
                     (index)=>LayoutBuilder(
                       builder: (BuildContext context,BoxConstraints constraints){
@@ -177,7 +182,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                           endIndent: 20,
                         );
                       },
-                    )
+                    ),
                   ),
                 ),
               ),

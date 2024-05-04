@@ -1,5 +1,3 @@
-import 'package:elibrary/extension/core_extension.dart';
-import 'package:elibrary/presentation/widget/action_card.dart';
 import 'package:elibrary/presentation/widget/image_tile.dart';
 import 'package:elibrary/presentation/widget/setting_section.dart';
 import 'package:elibrary/style/ui_params.dart';
@@ -7,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_strings.dart';
 import '../../style/app_colors.dart';
-import '../widget/custom_image_card.dart';
 import '../widget/info_display/headline2.dart';
-import '../widget/text_action_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -32,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: null,
+                    onPressed: ()=>Navigator.of(context).pushNamed('/booking'),
                     icon: Icon(
                       Icons.more_vert,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -118,9 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingSection(
                       children: [
-                        _buildSettingTitle(icon: Icons.timer, iconColor: Colors.blueAccent,title: AppStrs.myReservations, onTap: () { }),
+                        _buildSettingTitle(icon: Icons.timer, iconColor: Colors.blueAccent,title: AppStrs.myReservations, onTap: ()=>Navigator.of(context).pushNamed('/record'),),
                         const Divider( height: 1, thickness: 1, indent: 14,),
-                        _buildSettingTitle(icon: Icons.book, iconColor: Colors.amber,title: AppStrs.myBorrowed, onTap: () { }),
+                        _buildSettingTitle(icon: Icons.book, iconColor: Colors.amber,title: AppStrs.myBorrowed, onTap: ()=>Navigator.of(context).pushNamed('/record'),),
                         const Divider( height: 1, thickness: 1, indent: 14,),
                         _buildSettingTitle(icon: Icons.timeline_rounded, iconColor: AppColors.rustyRed,title: AppStrs.myFines, onTap: () { }),
                       ],
@@ -184,8 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
       child:ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
         leading: _wrappedIcon(
-            icon,
-            color: iconColor
+          icon,
+          color: iconColor,
         ),
         title: Text(
           title,

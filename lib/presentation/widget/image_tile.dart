@@ -10,6 +10,7 @@ class ImageTile extends StatelessWidget{
   final Widget image;
   final circleImage;
   final Color? surfaceColor;
+  final Color? subtitleColor;
   final Color? backgroundColor;
   final Widget? actionWidget;
   final double? fontSize;
@@ -17,7 +18,7 @@ class ImageTile extends StatelessWidget{
   final VoidCallback? onTap;
 
   const ImageTile({
-    Key? key,
+    super.key,
     required this.title,
     this.subTitle,
     this.thirdTitle,
@@ -28,8 +29,9 @@ class ImageTile extends StatelessWidget{
     this.actionWidget,
     this.fontSize,
     this.actionSize,
-    this.onTap
-  }) : super(key: key);
+    this.onTap,
+    this.subtitleColor
+  });
 
   @override
   Widget build(BuildContext context){
@@ -61,8 +63,8 @@ class ImageTile extends StatelessWidget{
               Text(
                 subTitle!,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: fontSize!=null?fontSize!*0.7:null,
+                  color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
+                  fontSize: fontSize!=null?fontSize!*0.8:null,
                   letterSpacing: -0.6,
                 ),
               ),

@@ -43,6 +43,9 @@ dependencies:
   flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.10+1
   qr_flutter: ^4.1.0
+  modal_bottom_sheet: ^3.0.0
+  simple_barcode_scanner: ^0.1.1
+  pull_down_button: ^0.9.4
 
 dev_dependencies:
   flutter_test:

@@ -103,7 +103,7 @@ class _BookDetailState extends State<BookDetail>{
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.9)),
                   ),
-                  onPressed: null,
+                  onPressed: ()=>Navigator.of(context).pushNamed('/booking'),
                   child: Text(
                     AppStrs.toBorrow,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(

@@ -1,3 +1,4 @@
+import 'package:elibrary/presentation/page/record_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -151,10 +152,13 @@ class _RecordPageState extends State<RecordPage> {
               ],
             ),
             Expanded(
-              child:PageView(
+              child: PageView(
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  Center(child:Text('Page One', style: Theme.of(context).textTheme.bodyLarge),),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 0),
+                    child: RecordView(),
+                  ),
                   Center(child:Text('Page One', style: Theme.of(context).textTheme.bodyLarge),),
                   Center(child:Text('Page One', style: Theme.of(context).textTheme.bodyLarge),),
                 ],
