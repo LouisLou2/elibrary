@@ -1,4 +1,7 @@
 class AppStrs{
+
+  static const cancel='取消';
+
   static const home='主页';
   static const search='找书';
   static const own_lib='书架';
@@ -37,4 +40,12 @@ class AppStrs{
   static const readOnline='在线阅读';
   static const toBorrow='借阅';
   static const reservationDetail='预约详情';
+
+  static const put_book='上架';
+
+  static const author='作者';
+  static const book='图书';
+  static const publisher='版权方';
+
+  static const more='更多';
 }

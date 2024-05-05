@@ -17,6 +17,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.11.0"
+  barcode_scan2:
+    dependency: "direct main"
+    description:
+      name: barcode_scan2
+      sha256: "847ff88888213a3b2866d98839ee6d85e4da8002df83e7971d355d24d5f31c4c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.3.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -65,6 +73,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
+  cupertino_onboarding:
+    dependency: "direct main"
+    description:
+      name: cupertino_onboarding
+      sha256: "948327610ba9204cde7d3f9a4f7fa2c5571272702a8c8c4d9ae0a2ec022393f1"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.2.0"
+  dots_indicator:
+    dependency: transitive
+    description:
+      name: dots_indicator
+      sha256: f1599baa429936ba87f06ae5f2adc920a367b16d08f74db58c3d0f6e93bcdb5c
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.2"
   equatable:
     dependency: transitive
     description:
@@ -352,6 +376,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.8"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.0"
   provider:
     dependency: "direct main"
     description:

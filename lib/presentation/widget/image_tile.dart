@@ -14,6 +14,8 @@ class ImageTile extends StatelessWidget{
   final Color? backgroundColor;
   final Widget? actionWidget;
   final double? fontSize;
+  final double? fontSize3;
+  final FontWeight? titleWeight;
   final double? actionSize;
   final VoidCallback? onTap;
 
@@ -30,7 +32,8 @@ class ImageTile extends StatelessWidget{
     this.fontSize,
     this.actionSize,
     this.onTap,
-    this.subtitleColor
+    this.subtitleColor,
+    this.titleWeight, this.fontSize3
   });
 
   @override
@@ -38,7 +41,10 @@ class ImageTile extends StatelessWidget{
     return Row(
       children: [
         Card(
+          margin: const EdgeInsets.all(0),
           color: backgroundColor,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
           clipBehavior: Clip.antiAlias,
           shape: circleImage?const CircleBorder():RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(UIParams.tinyBorderR),
@@ -52,8 +58,9 @@ class ImageTile extends StatelessWidget{
           children: [
             Text(
               title!,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontWeight: FontWeight.normal,
+                fontWeight: titleWeight?? FontWeight.normal,
                 letterSpacing: -0.6,
                 color: surfaceColor,
                 fontSize: fontSize,
@@ -62,6 +69,7 @@ class ImageTile extends StatelessWidget{
             if(subTitle!=null)
               Text(
                 subTitle!,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
                   fontSize: fontSize!=null?fontSize!*0.8:null,
@@ -71,9 +79,10 @@ class ImageTile extends StatelessWidget{
             if(thirdTitle!=null)
               Text(
                 thirdTitle!,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: fontSize!=null?fontSize!*0.6:null,
+                  fontSize: fontSize3??(fontSize!=null?fontSize!*0.6:null),
                 ),
               ),
           ],

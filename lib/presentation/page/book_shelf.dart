@@ -1,13 +1,12 @@
 import 'dart:ui';
 
-import 'package:elibrary/presentation/page/cupertino_share.dart';
+import 'package:elibrary/presentation/page/add_book_confirm_page.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_down_button/pull_down_button.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../constant/app_strings.dart';
 import '../widget/custom_image_card.dart';
@@ -40,23 +39,27 @@ class _BookShelfState extends State<BookShelf> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
                     child: IconButton(
-                      onPressed: ()async{
-                        var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SimpleBarcodeScannerPage(
-                                appBarTitle: '扫描图书条码',
-                                centerTitle: true,
-                                isShowFlashIcon: true,
-                              ),
-                            )
-                          );
-                          setState(() {
-                          if (res is String) {
-                            result = res;
-                            print(result);
-                          }
-                        });
+                      onPressed: () async {
+                        // var result = await BarcodeScanner.scan(
+                        // options: const ScanOptions(
+                        //   autoEnableFlash: false,
+                        //   strings: {
+                        //     'cancel': 'Cancel',
+                        //     'flash_on': 'Flash',
+                        //     'flash_off': 'Flash off',
+                        //   },
+                        // ),
+                        // );
+                        // print(result.type); // The result type (barcode, cancelled, failed)
+                        // print(result.rawContent); // The barcode content
+                        // print(result.format); // The barcode format (as enum)
+                        // print(result.formatNote); // If a unknown format was scanned this field contains a note,
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return const BookConfirmPage();
+                          },
+                        );
                       },
                       icon: Icon(
                         Icons.add,
@@ -195,6 +198,49 @@ class _BookShelfState extends State<BookShelf> {
             ],
           ),
         ),
+    );
+  }
+  Widget _buildKindWidget(String kind){
+    return Row(
+      children: [
+        Icon(
+          Icons.done_all,
+          color: Theme.of(context).primaryColor,
+        ),
+        Text(
+          kind,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            letterSpacing: -0.7,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _buildAvailableWidget({required String item,required BuildContext context, bool isAvailable = true}){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 11.w,vertical: 10.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(UIParams.smallBorderR),
+        color: isAvailable ? Theme.of(context).colorScheme.primary:Theme.of(context).disabledColor,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isAvailable ? Icons.done : Icons.close,
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          SizedBox(width: 5.w),
+          Text(
+            item,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.surface
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

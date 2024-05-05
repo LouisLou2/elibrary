@@ -1,15 +1,10 @@
-import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
-import 'package:elibrary/presentation/widget/gradient_image_card.dart';
-import 'package:elibrary/presentation/widget/section_window.dart';
-import 'package:elibrary/presentation/widget/text_action_widget.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/app_strings.dart';
-import '../widget/custom_image_card.dart';
 import '../widget/image_tile.dart';
-import '../widget/info_display/headline2.dart';
-import '../../extension/core_extension.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -21,6 +16,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 
   late SearchController _searchController;
+
   @override
   void initState() {
     _searchController = SearchController();
@@ -30,15 +26,15 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ProvManager.themeProv.mode==ThemeMode.light? Theme.of(context).scaffoldBackgroundColor.withAlpha(245):Colors.black,
       appBar: null,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child:Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Hero(
+          child: Column(
+            children:[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Hero(
                   tag: 'browsePage:searchBar',
                   child:SearchBar(
                     autoFocus: true,
@@ -83,11 +79,88 @@ class _SearchPageState extends State<SearchPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: UIParams.mediumGap),
-                _buildSearchHistorySection(context),
-              ],
-            ),
-          )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: _buildResultContainer(
+                  sectionName: AppStrs.author,
+                  items: [
+                    ImageTile(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      image: const CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage('assets/images/avatar1.png'),
+                      ),
+                      title: '叶圣陶',
+                      fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                      titleWeight: FontWeight.w500,
+                      subTitle: '作者 | Author Description',
+                      onTap: (){},
+                      actionWidget: Icon(
+                        CupertinoIcons.forward,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: _buildResultContainer(
+                  sectionName: AppStrs.publisher,
+                  items: [
+                    ImageTile(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      image: const CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage('assets/images/avatar1.png'),
+                      ),
+                      title: '人民邮电出版社',
+                      fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                      titleWeight: FontWeight.w500,
+                      subTitle: '版权方 | 出版过 1000 本书',
+                      onTap: (){},
+                      actionWidget: Icon(
+                        CupertinoIcons.forward,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: _buildResultContainer(
+                  sectionName: AppStrs.book,
+                  items: List.generate(7, (index) =>
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: ImageTile(
+                        backgroundColor: Theme.of(context).colorScheme.background,
+                        image: Image.network(
+                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                          fit: BoxFit.cover,
+                          width: 58,
+                          height: 80,
+                        ),
+                        title: 'Dart Apprentice',
+                        fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
+                        titleWeight: FontWeight.w500,
+                        subTitle: '作者 | Author Description',
+                        thirdTitle: '人民邮电出版社',
+                        fontSize3: Theme.of(context).textTheme.bodySmall?.fontSize,
+                        onTap: (){},
+                        actionWidget: Icon(
+                          CupertinoIcons.forward,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -118,6 +191,46 @@ class _SearchPageState extends State<SearchPage> {
           )).toList(),
         ),
       ],
+    );
+  }
+  Widget _buildResultContainer({required String sectionName, required List<Widget> items}){
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(13),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+        borderRadius: BorderRadius.circular(UIParams.defBorderR),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                sectionName,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                AppStrs.more,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              Icon(
+                CupertinoIcons.forward,
+                size: Theme.of(context).textTheme.titleSmall?.fontSize,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ...items,
+        ],
+      ),
     );
   }
 }
