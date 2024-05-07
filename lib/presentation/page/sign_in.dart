@@ -1,3 +1,5 @@
+import 'package:elibrary/state_management/auth_prov.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
             SizedBox(height: UIParams.hugeGap.h,),
             Form(
-              key:_formKey,
+              key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -161,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
                         validator: validatePwd,
                       ),
                     ),
-                    SizedBox(height: 150.h,),
+                    SizedBox(height: 220.h,),
                     _buildButton(
                       text: '登录',
                       onPressed: () { },
@@ -170,7 +172,7 @@ class _SignInPageState extends State<SignInPage> {
                     SizedBox(height: 20.h,),
                     _buildButton(
                       text: '使用邮箱验证码',
-                      onPressed: () { },
+                      onPressed: ()=>ProvManager.authProv.authState=AuthState.enterEmail,
                       backgroundColor: Theme.of(context).focusColor,
                       textColor: CupertinoColors.systemBlue,
                     ),

@@ -1,9 +1,12 @@
 import 'dart:ui';
 
 import 'package:elibrary/init_affairs.dart';
+import 'package:elibrary/presentation/page/auth_pages.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/booking_page.dart';
 import 'package:elibrary/presentation/page/browse_user_page.dart';
+import 'package:elibrary/presentation/page/check_code_page.dart';
+import 'package:elibrary/presentation/page/enter_email_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record_page.dart';
 import 'package:elibrary/presentation/page/reservation_detail.dart';
@@ -57,7 +60,7 @@ class _MyAppState extends State<MyApp>{
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,
               themeMode: prov.mode,
-              home: const MainTabsPage(),
+              home: const AuthPages(),
             ),
           )
       ),

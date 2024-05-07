@@ -3,6 +3,7 @@ class UIParams{
   static const double defIconS=28;
   static const double medIconS=22;
   static const double defTextSize=16;
+
   static const double defShadowBlurR=5;
   static const double apparentShadowBlurR=10;
   static const double defBorderR=8;
@@ -10,8 +11,10 @@ class UIParams{
   static const double bigBorderR=20;
   static const double smallBorderR=6;
   static const double tinyBorderR=4;
-  static const double defAvatarBorderW=3.0;
   static const double defSmallAvatarR=8;
+
+  static const double defAvatarBorderW=3.0;
+  static const double smallBoxBorderW=2.5;
 
   static const int defSnackBarDuration_info=3;
   static const int defSnackBarDuration_error=5;
