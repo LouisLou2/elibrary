@@ -38,63 +38,66 @@ class ImageTile extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return Row(
-      children: [
-        Card(
-          margin: const EdgeInsets.all(0),
-          color: backgroundColor,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          clipBehavior: Clip.antiAlias,
-          shape: circleImage?const CircleBorder():RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(UIParams.tinyBorderR),
-          ),
-          child: image,
-        ),
-        const SizedBox(width: 10,),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title!,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: titleWeight?? FontWeight.normal,
-                letterSpacing: -0.6,
-                color: surfaceColor,
-                fontSize: fontSize,
-              ),
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Card(
+            margin: const EdgeInsets.all(0),
+            color: backgroundColor,
+            elevation: 0,
+            surfaceTintColor: Colors.transparent,
+            clipBehavior: Clip.antiAlias,
+            shape: circleImage?const CircleBorder():RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(UIParams.tinyBorderR),
             ),
-            if(subTitle!=null)
+            child: image,
+          ),
+          const SizedBox(width: 10,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                subTitle!,
+                title!,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
-                  fontSize: fontSize!=null?fontSize!*0.8:null,
+                  fontWeight: titleWeight?? FontWeight.normal,
                   letterSpacing: -0.6,
+                  color: surfaceColor,
+                  fontSize: fontSize,
                 ),
               ),
-            if(thirdTitle!=null)
-              Text(
-                thirdTitle!,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: fontSize3??(fontSize!=null?fontSize!*0.6:null),
+              if(subTitle!=null)
+                Text(
+                  subTitle!,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
+                    fontSize: fontSize!=null?fontSize!*0.8:null,
+                    letterSpacing: -0.6,
+                  ),
                 ),
-              ),
-          ],
-        ),
-        if(actionWidget!=null)
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: actionWidget,
-            ),
+              if(thirdTitle!=null)
+                Text(
+                  thirdTitle!,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: fontSize3??(fontSize!=null?fontSize!*0.6:null),
+                  ),
+                ),
+            ],
           ),
-      ],
+          if(actionWidget!=null)
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: actionWidget,
+              ),
+            ),
+        ],
+      ),
     );
   }
   // @override

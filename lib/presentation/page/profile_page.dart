@@ -3,6 +3,7 @@ import 'package:elibrary/presentation/widget/setting_section.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../constant/app_strings.dart';
 import '../../style/app_colors.dart';
 import '../widget/info_display/headline2.dart';
@@ -21,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: null,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: 18.w),
           child:Column(
             children:[
               Row(
@@ -54,9 +55,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 20),
                       children: [
                         ImageTile(
-                          image: Image.asset(
-                            'assets/images/avatar1.png',
-                            width: 60,
+                          image: CircleAvatar(
+                            radius: 28.w,
+                            child: Text(
+                              'L',
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontSize: 25.w,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
                           ),
                           circleImage: true,
                           title: 'Leo Chen',

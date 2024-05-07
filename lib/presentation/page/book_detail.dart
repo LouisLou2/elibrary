@@ -1,6 +1,7 @@
 import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
 import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
+import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -379,7 +380,7 @@ class _BookDetailState extends State<BookDetail>{
                 ),
                 Divider(
                   height: 15.h,
-                  thickness: 1.0,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 BoxGroove(
                   widgets: [
@@ -389,6 +390,16 @@ class _BookDetailState extends State<BookDetail>{
                     SizedBox(width: UIParams.smallGap.w),
                     _buildAvailableWidget(item: '铁道校区图书馆', context: context,isAvailable: false),
                   ],
+                ),
+                SizedBox(height: UIParams.mediumGap.h),
+                TextActionWidget(
+                  surfaceColor: Theme.of(context).colorScheme.primary,
+                  onTap: ()=>Navigator.of(context).pushNamed('/user_list'),
+                  text: SpecTextWidget.smallTitle(
+                    text:'向其他读者借阅',
+                    context: context,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),
@@ -409,7 +420,7 @@ class _BookDetailState extends State<BookDetail>{
                 ),
                 Divider(
                   height: 15.h,
-                  thickness: 1.0,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 BoxGroove(
                   widgets: List.generate(2,
@@ -434,7 +445,7 @@ class _BookDetailState extends State<BookDetail>{
             child: Align(
               alignment: Alignment.centerLeft,
               child: BoxGroove(
-                title: SpecTextWidget.smallTitle('更多Jonathon Sandusky作品',context),
+                title: SpecTextWidget.smallTitle(text: '更多Jonathon Sandusky作品',context: context),
                 widgets: List.generate(2,
                       (index) => ImageInfoBox(
                     image: Image.network(

@@ -48,4 +48,18 @@ class AppStrs{
   static const publisher='版权方';
 
   static const more='更多';
+
+  // sign in page
+  static const signIn='登录';
+  static const signUp='注册';
+  static const forgotPassword='忘记了密码?';
+  static const email='邮箱';
+  static const schoolEmail='学校邮箱';
+  static const password='密码';
+  static const pleaseEnterPassword='请输入密码';
+  static const invalidEmail='无效的邮箱';
+  static const pleaseEnterEmail='请输入邮箱';
+  static const invalidPassword='无效的密码';
+  static const passwordRules='密码至少8位，包含数字和字母';
+  static const orLoginWith='或使用以下方式登录';
 }

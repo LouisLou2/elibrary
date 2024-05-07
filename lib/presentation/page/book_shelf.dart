@@ -64,7 +64,7 @@ class _BookShelfState extends State<BookShelf> {
                       icon: Icon(
                         Icons.add,
                         color: Theme.of(context).colorScheme.onSurface,
-                        size: 30,
+                        size: UIParams.defIconS.w,
                       ),
                     ),
                   ),
@@ -108,7 +108,7 @@ class _BookShelfState extends State<BookShelf> {
                       icon: Icon(
                         Icons.more_vert,
                         color: Theme.of(context).colorScheme.onSurface,
-                        size: 30,
+                        size: UIParams.defIconS.w,
                       ),
                     ),
                   ),

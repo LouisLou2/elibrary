@@ -1,13 +1,15 @@
-
 import 'dart:ui';
 
 import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/booking_page.dart';
+import 'package:elibrary/presentation/page/browse_user_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record_page.dart';
 import 'package:elibrary/presentation/page/reservation_detail.dart';
 import 'package:elibrary/presentation/page/search_page.dart';
+import 'package:elibrary/presentation/page/sign_in.dart';
+import 'package:elibrary/presentation/page/user_list.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
@@ -48,6 +50,9 @@ class _MyAppState extends State<MyApp>{
                 '/record':(context)=>const RecordPage(),
                 '/booking':(context)=>const BookingPage(),
                 '/search':(context)=>const SearchPage(),
+                '/user_list': (context) => const UserListPage(),
+                '/browse_user': (context) => const BrowseUserPage(),
+                '/sign_in': (context) => const SignInPage(),
               },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,
@@ -116,18 +121,18 @@ class _HomePageState extends State<HomePagee> {
                   ),
                 ),
                 if (_isSelectionMode && _isSelected[index])
-                  Positioned(
-                    bottom: 4,
-                    right: 4,
-                    child: IconButton(
-                      icon: const Icon(Icons.check_circle),
-                      onPressed: () {
-                        setState(() {
-                          _isSelected[index] = !_isSelected[index];
-                        });
-                      },
-                    ),
+                Positioned(
+                  bottom: 4,
+                  right: 4,
+                  child: IconButton(
+                    icon: const Icon(Icons.check_circle),
+                    onPressed: () {
+                      setState(() {
+                        _isSelected[index] = !_isSelected[index];
+                      });
+                    },
                   ),
+                ),
               ],
             ),
           );

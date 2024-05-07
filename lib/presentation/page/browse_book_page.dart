@@ -146,7 +146,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 4),
                 child: TextActionWidget(
-                  text: SpecTextWidget.mediumTitle(AppStrs.trending, context),
+                  text: SpecTextWidget.mediumTitle(text: AppStrs.trending, context: context),
                   size: 22,
                   onTap: (){},
                 ),

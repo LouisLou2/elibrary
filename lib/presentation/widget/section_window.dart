@@ -30,7 +30,7 @@ class SectionWindow extends StatelessWidget{
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 8),
             child: TextActionWidget(
-              text:SpecTextWidget.mediumTitle(title, context),
+              text:SpecTextWidget.mediumTitle(text: title, context: context),
               size: fontSize,
               onTap: titleOnTap,
             ),

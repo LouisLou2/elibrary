@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage>{
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
                     child: IconButton(
-                      onPressed: ()=>Navigator.of(context).pushNamed('/book_detail'),
+                      onPressed: ()=>Navigator.of(context).pushNamed('/sign_in'),
                       icon: Icon(
                         Icons.notifications_active_outlined,
                         color: Theme.of(context).colorScheme.onSurface,
