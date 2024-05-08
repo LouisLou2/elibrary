@@ -40,6 +40,7 @@ class AppStrs{
   static const readOnline='在线阅读';
   static const toBorrow='借阅';
   static const reservationDetail='预约详情';
+  static const borrowDetail='借阅详情';
 
   static const put_book='上架';
 

@@ -4,6 +4,7 @@ import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/auth_pages.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/booking_page.dart';
+import 'package:elibrary/presentation/page/borrow_detail.dart';
 import 'package:elibrary/presentation/page/browse_user_page.dart';
 import 'package:elibrary/presentation/page/chat_page.dart';
 import 'package:elibrary/presentation/page/chat_session.dart';

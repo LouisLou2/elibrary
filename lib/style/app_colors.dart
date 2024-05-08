@@ -27,8 +27,10 @@ class AppColors{
   static const Color oilGreen=Color(0xff84bd00);
   static const MaterialColor basicGreen=Colors.green;
   static const Color silentGreen=Color(0xff239954);
+  static const Color deepGreen=Color(0xff11862f);
 
   static const Color thickRed=Color(0xff9E1A1A);
+  static const Color ruby= Color(0xff900603);
   static const Color rustyRed=Color(0xffe04646);
 
   static const Color freshBlue=Color(0xff34e7e4);
