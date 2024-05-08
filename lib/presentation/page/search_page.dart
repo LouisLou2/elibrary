@@ -2,6 +2,7 @@ import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../constant/app_strings.dart';
 import '../widget/image_tile.dart';
@@ -140,8 +141,8 @@ class _SearchPageState extends State<SearchPage> {
                         image: Image.network(
                           'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                           fit: BoxFit.cover,
-                          width: 58,
-                          height: 80,
+                          width: AppRepreConst.tinyBookW.w,
+                          height: AppRepreConst.tinyBookW.w * AppRepreConst.bookCoverRatio,
                         ),
                         title: 'Dart Apprentice',
                         fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,

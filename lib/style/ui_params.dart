@@ -36,3 +36,17 @@ class UIParams{
 
   static const double defAvatarRingInterval=4;
 }
+
+class AppRepreConst{
+  static const double bookCoverRatio=1.388;
+  static const double cardRatio=0.417;
+
+  static const double tinyBookW=54;
+  static const double smallBookW=65;
+  static const double mediumBookW=84;
+  static const double bigBookW=128;
+  static const double biggerBookW=164;
+  static const double hugeBookW=182;
+
+  static const double grandCardW=300;
+}

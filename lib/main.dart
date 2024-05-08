@@ -5,12 +5,15 @@ import 'package:elibrary/presentation/page/auth_pages.dart';
 import 'package:elibrary/presentation/page/book_detail.dart';
 import 'package:elibrary/presentation/page/booking_page.dart';
 import 'package:elibrary/presentation/page/browse_user_page.dart';
+import 'package:elibrary/presentation/page/chat_page.dart';
+import 'package:elibrary/presentation/page/chat_session.dart';
 import 'package:elibrary/presentation/page/check_code_page.dart';
 import 'package:elibrary/presentation/page/enter_email_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record_page.dart';
 import 'package:elibrary/presentation/page/reservation_detail.dart';
 import 'package:elibrary/presentation/page/search_page.dart';
+import 'package:elibrary/presentation/page/section_list_page.dart';
 import 'package:elibrary/presentation/page/sign_in.dart';
 import 'package:elibrary/presentation/page/user_list.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
@@ -56,11 +59,14 @@ class _MyAppState extends State<MyApp>{
                 '/user_list': (context) => const UserListPage(),
                 '/browse_user': (context) => const BrowseUserPage(),
                 '/sign_in': (context) => const SignInPage(),
+                '/chat_page': (context) => const ChatPage(),
+                '/chat_session': (context) => const ChatSessionPage(),
+                '/section_list': (context) => const SectionListPage(),
               },
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,
               themeMode: prov.mode,
-              home: const AuthPages(),
+              home: const MainTabsPage(),
             ),
           )
       ),

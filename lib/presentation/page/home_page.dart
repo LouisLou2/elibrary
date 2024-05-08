@@ -4,6 +4,7 @@ import 'package:elibrary/presentation/widget/card_layout.dart';
 import 'package:elibrary/presentation/widget/info_display/headline2.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../constant/app_strings.dart';
 import '../widget/custom_image_card.dart';
@@ -59,14 +60,14 @@ class _HomePageState extends State<HomePage>{
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22,fontWeight: FontWeight.w500),
                     AppStrs.recomend,
                   ),
-                  titleOnTap: ()=>print('tt'),
+                  titleOnTap: ()=>Navigator.of(context).pushNamed('/section_list'),
                   widgets:List.generate(5,
                      (index) => CustomImageCard(
                        image: Image.network(
                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                          fit: BoxFit.cover,
-                         width: 200,
-                         height: 300,
+                         width: AppRepreConst.hugeBookW.w,
+                         height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
                        ),
                        text: '这是对图片的说明',
                        surfaceColor: Colors.white,
@@ -90,8 +91,8 @@ class _HomePageState extends State<HomePage>{
                       image: Image.network(
                         'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                         fit: BoxFit.cover,
-                        width: 150,
-                        height: 200,
+                        width: AppRepreConst.bigBookW.w,
+                        height: AppRepreConst.bigBookW.w * AppRepreConst.bookCoverRatio,
                       ),
                       title: '愤怒的葡萄',
                       fontSize: 16,
@@ -115,8 +116,8 @@ class _HomePageState extends State<HomePage>{
                       image: Image.network(
                         'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                         fit: BoxFit.cover,
-                        width: 360,
-                        height: 150,
+                        width: AppRepreConst.grandCardW.w,
+                        height: AppRepreConst.grandCardW.w * AppRepreConst.cardRatio,
                       ),
                       title: '校本部图书馆读书会',
                       subTitle: '2024.5.1-2024.5.5',

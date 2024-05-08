@@ -4,6 +4,7 @@ import 'package:elibrary/presentation/widget/section_window.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../constant/app_strings.dart';
 import '../widget/custom_image_card.dart';
@@ -167,8 +168,8 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                         image: Image.network(
                           'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                           fit: BoxFit.cover,
-                          width: 100,
-                          height: 120,
+                          width: AppRepreConst.mediumBookW.w,
+                          height: AppRepreConst.mediumBookW.w * AppRepreConst.bookCoverRatio,
                         ),
                         actionWidget: null,
                         fontSize: 20,
@@ -177,8 +178,8 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                     (index)=>LayoutBuilder(
                       builder: (BuildContext context,BoxConstraints constraints){
                         return Divider(
-                          height: 10,
-                          indent: constraints.maxWidth*0.35,
+                          height: UIParams.smallGap.h,
+                          indent: constraints.maxWidth * 0.3,
                           endIndent: 20,
                         );
                       },

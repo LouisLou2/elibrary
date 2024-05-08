@@ -183,8 +183,8 @@ class _BookShelfState extends State<BookShelf> {
                             image: Image.network(
                               'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
                               fit: BoxFit.cover,
-                              width: 200,
-                              height: 300,
+                              width: 220.w,
+                              height: 277.h,
                             ),
                             text: 'Dart Apprentice',
                             //useSolidColor: true,
