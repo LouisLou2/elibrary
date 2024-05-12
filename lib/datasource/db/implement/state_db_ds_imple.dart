@@ -28,6 +28,10 @@ class StateDbDsImple implements StateDbDs {
   @override
   Future<void> saveUser(User user) async {
     DBManager.db.writeTxn(() async {
+      final userInDb = await DBManager.db.users.where().userIdEqualTo(user.userId).findFirst();
+      if(userInDb!=null){
+        user.id=userInDb.id;
+      }
       DBManager.db.users.put(user);
     });
   }

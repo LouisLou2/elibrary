@@ -28,7 +28,7 @@ class NetworkPathCollector {
   static const String bookDetail = "$book/book_detail";
   /*
    * book_shelf
-   * get: 用于获取书架藏书
+   * get: 用于获取书架藏书 put: 用于添加藏书 delete: 用于删除藏书
    */
   static const String bookShelf = '$book/own_books';
 }

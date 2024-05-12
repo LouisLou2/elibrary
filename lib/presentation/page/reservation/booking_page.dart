@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:elibrary/state_management/prov/theme_prov.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,8 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
 
+  final ThemeProv _tprov= ProvManager.themeProv;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +45,7 @@ class _BookingPageState extends State<BookingPage> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Container(
-                color: Colors.black.withOpacity(0.05),
+                color: _tprov.mode==ThemeMode.light ? Colors.black.withOpacity(0.05) : Colors.black.withOpacity(0.4),
               ),
             ),
           ),
@@ -52,15 +56,8 @@ class _BookingPageState extends State<BookingPage> {
             child: Container(
               height: MediaQuery.of(context).size.height * 0.6, // 控制容器高度为屏幕的50%
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.6),
-                    blurRadius: 10,
-                    spreadRadius: 5,
-                  ),
-                ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -83,7 +80,6 @@ class _BookingPageState extends State<BookingPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  SizedBox(width: UIParams.smallGap.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -99,7 +95,7 @@ class _BookingPageState extends State<BookingPage> {
                               initialItem: 1,
                             ),
                           // This is called when selected item is changed.
-                            onSelectedItemChanged: null,
+                            onSelectedItemChanged: (index)=>print('onSelectedItemChanged:$index'),
                             children: List.generate(_libNames.length, (index) =>
                                 Center(
                                 child: Text(
@@ -117,11 +113,18 @@ class _BookingPageState extends State<BookingPage> {
                           '校本部图书馆',
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
-                            fontSize: 16.sp,
+                            fontSize: 14.sp,
                           ),
                         ),
                       )
                     ],
+                  ),
+                  Center(
+                  child:
+                    Text(
+                      '选择归还时间',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                   Flexible(
                     child: Row(
@@ -131,6 +134,7 @@ class _BookingPageState extends State<BookingPage> {
                         SizedBox(
                           width: 100.w,
                           child:ListWheelScrollView(
+                            onSelectedItemChanged: (index)=>print(index),
                             itemExtent: 40,
                             diameterRatio: 1,
                             useMagnifier: true,
@@ -269,7 +273,7 @@ class _BookingPageState extends State<BookingPage> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
                     blurRadius: 10,
                     spreadRadius: 5,
                   ),

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CupertinoSharePage extends StatelessWidget {
+  const CupertinoSharePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final baseTextStyle = CupertinoTheme.of(context).textTheme.textStyle;
@@ -29,9 +31,9 @@ class CupertinoSharePage extends StatelessWidget {
           ],
         ),
         trailing: CupertinoButton(
-          child: Text('Edit'),
           padding: EdgeInsets.zero,
           onPressed: () {},
+          child: Text('Edit'),
         ),
       ),
       child: Column(

@@ -13,7 +13,9 @@ import 'package:elibrary/respository/interface/user_book_repo.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/usecase/path_manager.dart';
 import 'package:elibrary/usecase/requester/implement/auth_requester_imple.dart';
+import 'package:elibrary/usecase/requester/implement/user_book_requester.dart';
 import 'package:elibrary/usecase/requester/interface/auth_requester.dart';
+import 'package:elibrary/usecase/requester/interface/userbook_requester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -70,5 +72,6 @@ Future<void> initInjection() async{
   GetIt.I.registerSingleton<UserBookRep>(UserBookRepImple());
   /*------------------usecase--------------------*/
   //requester
-  GetIt.I.registerSingleton<AuthReq>(AuthRequesterImple());
+  GetIt.I.registerLazySingleton<AuthReq>(()=>AuthRequesterImple());
+  GetIt.I.registerLazySingleton<UserBookReq>(() => UserBookReqImplent());
 }

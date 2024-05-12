@@ -29,6 +29,10 @@ class BookInfoDbDsImple implements BookInfoDbDs {
   Future<Result<bool>> saveBookInfo(BookInfo bookInfo) {
     return db.writeTxn(() async {
       try{
+        final info = await db.bookInfos.where().isbnEqualTo(bookInfo.isbn).findFirst();
+        if(info!=null){
+          bookInfo.id=info.id;
+        }
         db.bookInfos.put(bookInfo);
         return Result.success(true);
       } catch(e){

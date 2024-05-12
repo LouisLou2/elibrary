@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/widget/Image_card_with_info.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
 import 'package:elibrary/presentation/widget/card_layout.dart';
@@ -69,23 +70,18 @@ class _HomePageState extends State<HomePage>{
                 padding: const EdgeInsets.only(left:14),
                 child: Selector<ContentProv,int>(
                   selector: (_,prov)=> min(prov.recommendBooks.length,ContentHandler.home_reco_num),
-                  builder: (_,num,__)=>BoxGroove(
+                  builder: (_,number,__)=>BoxGroove(
                     title: Text(
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22,fontWeight: FontWeight.w500),
                       AppStrs.recomend,
                     ),
                     titleOnTap: ()=>Navigator.of(context).pushNamed('/section_list'),
-                    widgets: List.generate(num,
+                    widgets: List.generate(number,
                       (index) => CustomImageCard(
-                        image: CachedNetworkImage(
-                          imageUrl: cprov.recommendBooks[index].bookInfo.cover_l_url??'',
-                          fit: BoxFit.cover,
+                        image: getCustomCachedImage(
+                          url: cprov.recommendBooks[index].bookInfo.cover_l_url??'',
                           width: AppRepreConst.hugeBookW.w,
                           height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                         fontSize: 16,
                         text: cprov.recommendBooks[index].bookInfo.title,

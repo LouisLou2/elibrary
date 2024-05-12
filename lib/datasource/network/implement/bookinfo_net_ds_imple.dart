@@ -32,7 +32,7 @@ class BookInfoNetDsImple implements BookInfoNetDs{
       );
       RespBody respBody=RespBody.fromJson(response.data);
       if(respBody.code==ResCode.SUCCESS){
-        BookInfo bookInfo=BookInfo.fromJson(respBody.data);
+        BookInfo bookInfo=BookInfo.fromJson(respBody.data['book_info']);
         return Result.success(bookInfo);
       }else{
         return Result.abnormal(respBody.code);

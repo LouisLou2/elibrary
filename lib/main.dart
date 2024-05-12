@@ -5,6 +5,7 @@ import 'package:elibrary/config/test_device.dart';
 import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/onboarding_page.dart';
+import 'package:elibrary/presentation/page/reservation/booking_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/prov/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp>{
               themeMode: prov.mode,
               navigatorKey: NavigationHelper.key,
               onGenerateRoute: RouteGenerator.generateRoute,
-              home: _getHome(),
+              home: const BookingPage(),
             ),
           ),
         ),

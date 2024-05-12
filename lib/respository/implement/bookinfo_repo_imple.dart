@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../constant/rescode.dart';
 import '../../domain/util_model/res_info.dart';
+import '../../helper/global_exception_helpe.dart';
 import '../interface/bookinfo_repo.dart';
 
 class BookInfoRepImple implements BookInfoRep {
@@ -29,9 +30,20 @@ class BookInfoRepImple implements BookInfoRep {
   }
 
   @override
-  Future<Result<List<BookInfo>>> getRecoBooks({required int offset, required int num}) {
+  Future<Result<List<BookInfo>>> getRecoBooks({required int offset, required int num}) async{
     // 只从网络获取
-    return bookInfoNetDs.getRecoBooks(offset, num);
+    Result<List<BookInfo>> bookInfoRes = await bookInfoNetDs.getRecoBooks(offset, num);
+    if(bookInfoRes.resCode==ResCode.SUCCESS){
+      // 保存到数据库
+      try{
+        for (var bookinfo in bookInfoRes.data!) {
+          bookInfoDbDs.saveBookInfo(bookinfo); // 这一步就算出错也不会影响返回结果，故不管了
+        }
+      }catch(e){
+        // return GlobalExceptionHelper.getErrorResInfo(e);
+        // 因为目前结果体系只有一个表示结果的code, 但是实际上可能有多个错误，所但是这里即使无法缓存，也不是大问题， 暂时忽视
+      }
+    }
+    return bookInfoRes;
   }
-  
 }
