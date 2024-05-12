@@ -54,6 +54,7 @@ class CustomImageCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       text,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: surfaceColor,
                         fontSize: fontSize,

@@ -1,13 +1,19 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elibrary/presentation/widget/Image_card_with_info.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
 import 'package:elibrary/presentation/widget/card_layout.dart';
 import 'package:elibrary/presentation/widget/info_display/headline2.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/content_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-import '../../constant/app_strings.dart';
-import '../widget/custom_image_card.dart';
+import '../../../constant/app_strings.dart';
+import '../../../state_management/prov/content_prov.dart';
+import '../../widget/custom_image_card.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key,});
@@ -15,6 +21,12 @@ class HomePage extends StatefulWidget{
   State<HomePage> createState()=>_HomePageState();
 }
 class _HomePageState extends State<HomePage>{
+  ContentProv cprov = ContentHandler.contentProv;
+  @override
+  void initState(){
+    ContentHandler.initHomePageContent();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -29,7 +41,7 @@ class _HomePageState extends State<HomePage>{
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
                     child: IconButton(
-                      onPressed: ()=>Navigator.of(context).pushNamed('/sign_in'),
+                      onPressed: null,
                       icon: Icon(
                         Icons.notifications_active_outlined,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -55,39 +67,30 @@ class _HomePageState extends State<HomePage>{
               const SizedBox(height: UIParams.mediumGap,),
               Padding(
                 padding: const EdgeInsets.only(left:14),
-                child: BoxGroove(
-                  title: Text(
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22,fontWeight: FontWeight.w500),
-                    AppStrs.recomend,
-                  ),
-                  titleOnTap: ()=>Navigator.of(context).pushNamed('/section_list'),
-                  widgets:List.generate(5,
-                     (index) => CustomImageCard(
-                       // image: FadeInImage(
-                       //   placeholder: AssetImage('assets/images/default_avatar.jpg'),
-                       //   image: AssetImage('assets/images/aatar1.png'),
-                       //   imageErrorBuilder: (context, error, stackTrace) => Image.asset(
-                       //     'assets/images/default_avatar.jpg',
-                       //     fit: BoxFit.cover,
-                       //     width: AppRepreConst.hugeBookW.w,
-                       //     height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
-                       //   ),
-                       //   fit: BoxFit.cover,
-                       //   width: AppRepreConst.hugeBookW.w,
-                       //   height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
-                       // ),
-                       image: FadeInImage.assetNetwork(
-                         fadeInDuration: const Duration(milliseconds: 150),
-                         fadeOutDuration: const Duration(milliseconds: 150),
-                         placeholder: 'assets/images/avatar1.png',
-                         image: 'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                         fit: BoxFit.cover,
-                         width: AppRepreConst.hugeBookW.w,
-                         height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
-                       ),
-                       text: '这是对图片的说明',
-                       surfaceColor: Colors.white,
-                     ),
+                child: Selector<ContentProv,int>(
+                  selector: (_,prov)=> min(prov.recommendBooks.length,ContentHandler.home_reco_num),
+                  builder: (_,num,__)=>BoxGroove(
+                    title: Text(
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22,fontWeight: FontWeight.w500),
+                      AppStrs.recomend,
+                    ),
+                    titleOnTap: ()=>Navigator.of(context).pushNamed('/section_list'),
+                    widgets: List.generate(num,
+                      (index) => CustomImageCard(
+                        image: CachedNetworkImage(
+                          imageUrl: cprov.recommendBooks[index].bookInfo.cover_l_url??'',
+                          fit: BoxFit.cover,
+                          width: AppRepreConst.hugeBookW.w,
+                          height: AppRepreConst.hugeBookW.w * AppRepreConst.bookCoverRatio,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
+                        fontSize: 16,
+                        text: cprov.recommendBooks[index].bookInfo.title,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -105,7 +108,7 @@ class _HomePageState extends State<HomePage>{
                   widgets:List.generate(5,
                     (index) => ImageInfoBox(
                       image: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                        'https://img1.baidu.com/it/u=3715471658,3948653362&fm=253&fmt=auto&app=120&f=JPEG?w=390&h=520',
                         fit: BoxFit.cover,
                         width: AppRepreConst.bigBookW.w,
                         height: AppRepreConst.bigBookW.w * AppRepreConst.bookCoverRatio,
@@ -130,14 +133,14 @@ class _HomePageState extends State<HomePage>{
                   widgets:List.generate(5,
                     (index) => CardLayout(
                       image: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                        'https://img1.baidu.com/it/u=3715471658,3948653362&fm=253&fmt=auto&app=120&f=JPEG?w=390&h=520',
                         fit: BoxFit.cover,
                         width: AppRepreConst.grandCardW.w,
                         height: AppRepreConst.grandCardW.w * AppRepreConst.cardRatio,
                       ),
                       title: '校本部图书馆读书会',
                       subTitle: '2024.5.1-2024.5.5',
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       action: FilledButton(
                         onPressed: ()=>print('查看详情'),
                         child: const Text(

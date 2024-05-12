@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors{
   const AppColors._();
+
   static const Color white0=Colors.white; // 完全白色
   static const Color white1 = Color(0xfff6f6f5); // 白色带有一点灰色，稍显温和
   static const Color white2 = Color(0xffe5e5e5); // 白色带有更多灰色
@@ -26,9 +27,12 @@ class AppColors{
 
   static const Color oilGreen=Color(0xff84bd00);
   static const MaterialColor basicGreen=Colors.green;
+
+  static const Color successGreen=Color(0xff199f19);
   static const Color silentGreen=Color(0xff239954);
   static const Color deepGreen=Color(0xff11862f);
 
+  static const Color normalRed=Color(0xffFF0000);
   static const Color thickRed=Color(0xff9E1A1A);
   static const Color ruby= Color(0xff900603);
   static const Color rustyRed=Color(0xffe04646);

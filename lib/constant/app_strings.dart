@@ -50,6 +50,7 @@ class AppStrs{
 
   static const more='更多';
 
+  static const invalidInput='无效输入';
   // sign in page
   static const signIn='登录';
   static const signUp='注册';
@@ -63,4 +64,15 @@ class AppStrs{
   static const invalidPassword='无效的密码';
   static const passwordRules='密码至少8位，包含数字和字母';
   static const orLoginWith='或使用以下方式登录';
+  static const useSchoolEmail='使用学校邮箱登录';
+  static const useEmailCode='使用邮箱验证码';
+  static const useEmailCodeIfFirst='首次登录请使用邮箱验证码';
+  // enter email page
+  static const enterSchoolEmail='请输入学校邮箱';
+  static const sendCode='发送验证码';
+  // set password page
+  static const setPwd='设置登录密码';
+  // onboarding page
+  static const logInToEnjoy='登录以畅享';
+  static const bookResources='图书资源';
 }

@@ -1,8 +1,11 @@
 import 'package:cupertino_onboarding/cupertino_onboarding.dart';
+import 'package:elibrary/presentation/helper/toast_helper.dart';
+import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/app_properties.dart';
+import '../../constant/app_strings.dart';
 
 class OnBoardingPage extends StatefulWidget {
 
@@ -13,6 +16,11 @@ class OnBoardingPage extends StatefulWidget {
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +60,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return CupertinoOnboarding(
       //bottomButtonColor: AppColors.discoBallBlue,
       bottomButtonBorderRadius: BorderRadius.circular(8),
-      onPressed: (){},
-      onPressedOnLastPage: (){},
+      onPressed: NavigationHelper.popAllAndAuth,
+      onPressedOnLastPage: NavigationHelper.popAllAndAuth,
       bottomButtonColor: CupertinoColors.systemBlue.resolveFrom(context),
       bottomButtonChild: Text(
-        '登录',
+        AppStrs.signIn,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
           color: Colors.white,
         ),
@@ -66,10 +74,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           title: Column(
             children: [
               const Text(
-                '登录以畅享',
+                AppStrs.logInToEnjoy,
               ),
               Text(
-                '图书资源',
+                AppStrs.bookResources,
                 style: TextStyle(
                   color: CupertinoColors.activeBlue.resolveFrom(context),
                 ),

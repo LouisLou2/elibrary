@@ -4,7 +4,10 @@ class Feature{
 
   Feature({required this.title, required this.desc});
 }
+
 class AppProperties{
+  static const String appName = 'elibrary';
+  static const String appVersion = '1.0.0';
   static List<Feature> features = [
     Feature(
       title: '海量图书',

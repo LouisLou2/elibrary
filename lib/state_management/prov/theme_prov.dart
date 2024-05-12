@@ -6,7 +6,7 @@ class ThemeProv extends ChangeNotifier{
   ThemeProv():mode=ThemeMode.light;
   void init(ThemeMode m){
     mode=m;
-    mode=ThemeMode.light;
+    //mode=ThemeMode.light;
   }
   void changeMode(ThemeMode m){
     mode=m;

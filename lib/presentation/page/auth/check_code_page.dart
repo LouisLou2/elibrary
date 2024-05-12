@@ -1,14 +1,15 @@
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../state_management/auth_prov.dart';
-import '../../state_management/prov_manager.dart';
-import '../../state_management/veri_code_prov.dart';
-import '../../util/format_util.dart';
-import '../widget/info_display/headline2.dart';
+import '../../../state_management/prov/auth_prov.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../../state_management/prov/veri_code_prov.dart';
+import '../../../util/format_util.dart';
+import '../../widget/info_display/headline2.dart';
 
 class EnterVeriCodePage extends StatefulWidget{
 
@@ -170,16 +171,12 @@ class _EnterVeriCodePageState extends State<EnterVeriCodePage> with WidgetsBindi
   void tyingCode(String code){
     vprov.setVeriCode = code;
     if(code.length==6){
-      sendVeriCode(code);
+      AuthHandler.logInWithCodeAndTmpEmail(
+        vprov.getVeriCode,
+      );
     }
   }
-  void sendVeriCode(String code){
-    //AuthHandler.executeSendVeriCode(code);
-    print('@@@@@@@@@@@sendVeriCode');
-  }
   void sendAgain(){
-    print('@@@@@@@@@@@sendAgain');
-    vprov.allowNext(false);
-    //AuthHandler.executeRequestVeriCode();
+    AuthHandler.reqEmailCodeWithTmpEmail();
   }
 }

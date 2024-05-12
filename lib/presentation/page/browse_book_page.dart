@@ -36,7 +36,6 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
     _focusNode.dispose();
     _searchController.dispose();
     super.dispose();
-    super.initState();
   }
 
   @override

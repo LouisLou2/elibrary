@@ -10,4 +10,7 @@ class AuthProv with ChangeNotifier {
     _authState = state;
     notifyListeners();
   }
+  void reset(){
+    _authState = AuthState.pwdLogIn;
+  }
 }

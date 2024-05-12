@@ -11,7 +11,7 @@ class TestDeviceCollection{
   static late TestDevice mobile;
   static late TestDevice desktop;
   static void init(){
-    mobile = TestDevice(dp1: 937.38,dp2: 438.02);
-    desktop = TestDevice(dp1: 0,dp2: 0);// 未测试
+    mobile = TestDevice(dp1: 937.38, dp2: 438.02);
+    desktop = TestDevice(dp1: 0, dp2: 0);// 未测试
   }
 }

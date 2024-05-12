@@ -16,7 +16,8 @@ class UIParams{
   static const double defAvatarBorderW=3.0;
   static const double smallBoxBorderW=2.5;
 
-  static const int defSnackBarDuration_info=3;
+  static const int defSnackBarDuration_warning=4;
+  static const int defSnackBarDuration_success=3;
   static const int defSnackBarDuration_error=5;
 
   static const double sThick=1.0;

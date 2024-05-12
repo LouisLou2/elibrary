@@ -1,9 +1,9 @@
 import 'package:animations/animations.dart';
-import 'package:elibrary/presentation/page/sign_in.dart';
-import 'package:elibrary/state_management/auth_prov.dart';
+import 'package:elibrary/presentation/page/auth/sign_in.dart';
+import 'package:elibrary/state_management/prov/auth_prov.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'check_code_page.dart';
 import 'enter_email_page.dart';
 
@@ -24,6 +24,7 @@ class _AuthPagesState extends State<AuthPages> {
 
   @override
   void dispose() {
+    ProvManager.authProv.reset();
     super.dispose();
   }
 

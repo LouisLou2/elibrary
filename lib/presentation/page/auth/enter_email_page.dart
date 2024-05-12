@@ -1,13 +1,15 @@
-import 'package:elibrary/state_management/auth_prov.dart';
+import 'package:elibrary/presentation/helper/toast_helper.dart';
+import 'package:elibrary/state_management/prov/auth_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/auth_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../constant/app_strings.dart';
-import '../../util/format_util.dart';
-import '../widget/named_divider.dart';
+import '../../../constant/app_strings.dart';
+import '../../../util/format_util.dart';
+import '../../widget/button_getter.dart';
 
 class EnterEmailPage extends StatefulWidget{
   const EnterEmailPage({super.key});
@@ -19,21 +21,17 @@ class EnterEmailPage extends StatefulWidget{
 class _EnterEmailPageState extends State<EnterEmailPage> {
   //使用它，可以在表单组件的外部使用表单状态
   final _formKey = GlobalKey<FormState>();
-
-  final ValueNotifier<bool> pwdVisibleNotifier = ValueNotifier(true);
   late final TextEditingController idenController;
-  late final TextEditingController pwdController;
 
   late int lastTime;
 
   String? emailTip;
-  String? pwdTip;
 
   @override
   void initState() {
-    lastTime=0;
-    emailTip=pwdTip=null;
     initializeControllers();
+    lastTime=0;
+    emailTip=null;
     super.initState();
   }
 
@@ -47,13 +45,10 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
     //listener在文本更改时会被调用
     idenController = TextEditingController()
       ..addListener(validateAllThrottle);
-    pwdController = TextEditingController()
-      ..addListener(validateAllThrottle);
   }
 
   void disposeControllers() {
     idenController.dispose();
-    pwdController.dispose();
   }
 
   void validateAllThrottle(){
@@ -67,28 +62,15 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
   bool allFieldValid(){
     return _formKey.currentState?.validate()??false;
   }
-
-
-  String? validatePwd(String? value){
+  String? validateEmail(String? value){
     if(value==null||value.isEmpty){
-      emailTip= AppStrs.pleaseEnterPassword;
-    }else if(!FormatTool.isPwdValid(value)){
-      emailTip=AppStrs.invalidPassword;
+      emailTip= AppStrs.pleaseEnterEmail;
+    }else if(!FormatTool.isEmailValid(value)){
+      emailTip= AppStrs.invalidEmail;
     }else{
       emailTip=null;
     }
     return emailTip;
-  }
-
-  String? validateEmail(String? value){
-    if(value==null||value.isEmpty){
-      pwdTip= AppStrs.pleaseEnterEmail;
-    }else if(!FormatTool.isEmailValid(value)){
-      pwdTip= AppStrs.invalidEmail;
-    }else{
-      pwdTip=null;
-    }
-    return pwdTip;
   }
 
   @override
@@ -97,20 +79,21 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
       canPop: false,
       onPopInvoked: (bool _)=>ProvManager.authProv.authState=AuthState.pwdLogIn,
       child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: ()=>ProvManager.authProv.authState=AuthState.pwdLogIn,
-            ),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: ()=>ProvManager.authProv.authState=AuthState.pwdLogIn,
           ),
-          body:Container(
+        ),
+        body: SingleChildScrollView(
+          child: Container(
             margin: EdgeInsets.symmetric(horizontal: 18.w,vertical: 4.h),
-            child:ListView(
-              padding: EdgeInsets.only(top: 120.h),
+            padding: EdgeInsets.only(top: 120.h),
+            child:Column(
               children: [
                 Align(
                   child: Text(
-                    '请输入学校邮箱',
+                    AppStrs.enterSchoolEmail,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -145,9 +128,10 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                           validator: validateEmail,
                         ),
                         SizedBox(height: UIParams.largeGap.h,),
-                        _buildButton(
-                          text: '发送验证码',
-                          onPressed: ()=>ProvManager.authProv.authState=AuthState.enterVerifyCode,
+                        getCustomFilledButton(
+                          context: context,
+                          text: AppStrs.sendCode,
+                          onPressed: submitEmail,
                           backgroundColor: CupertinoColors.systemBlue,
                         ),
                       ],
@@ -156,37 +140,22 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
                 ),
               ],
             ),
-          )
-      ),
-    );
-  }
-
-  void signInPressed() async {
-    if(allFieldValid()) {
-
-    }
-    else{
-
-    }
-  }
-
-  Widget _buildButton({required String text,required VoidCallback onPressed, Color? backgroundColor, Color? textColor}){
-    return FilledButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          backgroundColor??Theme.of(context).colorScheme.primary,
-        ),
-      ),
-      onPressed: onPressed,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: textColor?? Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
     );
+  }
+
+  void submitEmail() async {
+    if(allFieldValid()) {
+      ProvManager.authProv.authState=AuthState.enterVerifyCode;
+      AuthHandler.reqEmailCode(
+        email: idenController.text,
+        ifSuccess: ()=>ProvManager.authProv.authState=AuthState.enterVerifyCode,//ifSuccess
+      );
+    }
+    else{
+      ToastHelper.showWarningWithouDesc(AppStrs.invalidEmail);
+    }
   }
 }

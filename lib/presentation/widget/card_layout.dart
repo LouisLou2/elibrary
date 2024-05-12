@@ -1,8 +1,5 @@
 import 'package:elibrary/style/ui_params.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 
 class CardLayout extends StatelessWidget {
   final Image image;
@@ -14,7 +11,7 @@ class CardLayout extends StatelessWidget {
   final double? fontSize;
 
   const CardLayout(
-      {Key? key,
+      {super.key,
         required this.image,
         required this.title,
         this.subTitle,
@@ -22,7 +19,7 @@ class CardLayout extends StatelessWidget {
         this.action,
         this.backColor,
         this.fontSize
-      }) : super(key: key);
+      });
 
   @override
   Widget build(BuildContext context) {

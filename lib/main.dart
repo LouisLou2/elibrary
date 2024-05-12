@@ -1,29 +1,27 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:elibrary/config/test_device.dart';
 import 'package:elibrary/init_affairs.dart';
-import 'package:elibrary/presentation/page/auth_pages.dart';
-import 'package:elibrary/presentation/page/book_detail.dart';
-import 'package:elibrary/presentation/page/booking_page.dart';
-import 'package:elibrary/presentation/page/borrow_detail.dart';
-import 'package:elibrary/presentation/page/browse_user_page.dart';
-import 'package:elibrary/presentation/page/chat_page.dart';
-import 'package:elibrary/presentation/page/chat_session.dart';
-import 'package:elibrary/presentation/page/check_code_page.dart';
-import 'package:elibrary/presentation/page/enter_email_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
-import 'package:elibrary/presentation/page/record_page.dart';
-import 'package:elibrary/presentation/page/reservation_detail.dart';
-import 'package:elibrary/presentation/page/search_page.dart';
-import 'package:elibrary/presentation/page/section_list_page.dart';
-import 'package:elibrary/presentation/page/sign_in.dart';
-import 'package:elibrary/presentation/page/user_list.dart';
+import 'package:elibrary/presentation/page/onboarding_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
-import 'package:elibrary/state_management/theme_prov.dart';
+import 'package:elibrary/state_management/prov/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
+import 'package:elibrary/usecase/nav/navigation_helper.dart';
+import 'package:elibrary/usecase/nav/route_collector.dart';
+import 'package:elibrary/usecase/nav/route_generator.dart';
+import 'package:elibrary/usecase/requester/implement/auth_requester_imple.dart';
+import 'package:elibrary/usecase/requester/interface/auth_requester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
+
+import 'datasource/network/manage/network_config.dart';
+import 'domain/entity/user.dart';
+import 'domain/util_model/res_info.dart';
 
 /// Flutter code sample for [TabBar].
 class MyApp extends StatefulWidget {
@@ -46,108 +44,60 @@ class _MyAppState extends State<MyApp>{
   @override
   Widget build(BuildContext context) {
     initWhenWidgetBuilding(context);
+    final deviceSize = TestDeviceCollection.mobile;
     return ScreenUtilInit(
       child: MultiProvider(
-          providers: ProvManager.widgets(),
+        providers: ProvManager.widgets(),
+        child: ToastificationWrapper(
           child: Consumer<ThemeProv>(
             builder:(context,prov,_)=>MaterialApp(
-              routes: {
-                '/book_detail':(context)=>const BookDetail(),
-                '/reservation_detail': (context) => const ReservationDetail(),
-                '/record':(context)=>const RecordPage(),
-                '/booking':(context)=>const BookingPage(),
-                '/search':(context)=>const SearchPage(),
-                '/user_list': (context) => const UserListPage(),
-                '/browse_user': (context) => const BrowseUserPage(),
-                '/sign_in': (context) => const SignInPage(),
-                '/chat_page': (context) => const ChatPage(),
-                '/chat_session': (context) => const ChatSessionPage(),
-                '/section_list': (context) => const SectionListPage(),
-              },
+              debugShowCheckedModeBanner: false,
+              routes: RouteCollector.simpleRouteMap,
               theme: ThemeCollection.light,
               darkTheme: ThemeCollection.dark,
               themeMode: prov.mode,
-              home: const MainTabsPage(),
+              navigatorKey: NavigationHelper.key,
+              onGenerateRoute: RouteGenerator.generateRoute,
+              home: _getHome(),
             ),
-          )
+          ),
+        ),
       ),
     );
+  }
+  Widget _getHome(){
+    if(ProvManager.userProv.isLogin){
+      return const MainTabsPage();
+    }else{
+      return const OnBoardingPage();
+    }
   }
 }
 void main() async{
-  initMustBeforeRunApp();
-  await initAsync();
+  await initMustBeforeRunApp();
+  initAsync();
   runApp(const MyApp());
 }
 
-
-class HomePagee extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePagee> {
-  bool _isSelectionMode = false;
-  List<bool> _isSelected = List.generate(20, (_) => false);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('GridView with Selection'),
-        actions: [
-          IconButton(
-            icon: Icon(_isSelectionMode ? Icons.check : Icons.select_all),
-            onPressed: () {
-              setState(() {
-                _isSelectionMode = !_isSelectionMode;
-              });
-            },
-          ),
-        ],
-      ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 4.0,
-          mainAxisSpacing: 4.0,
-        ),
-        itemCount: 20,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                if (_isSelectionMode) {
-                  _isSelected[index] = !_isSelected[index];
-                }
-              });
-            },
-            child: Stack(
-              children: [
-                Container(
-                  color: _isSelected[index] ? Colors.blue.withOpacity(0.5) : Colors.transparent,
-                  child: Center(
-                    child: Text('Item $index'),
-                  ),
-                ),
-                if (_isSelectionMode && _isSelected[index])
-                Positioned(
-                  bottom: 4,
-                  right: 4,
-                  child: IconButton(
-                    icon: const Icon(Icons.check_circle),
-                    onPressed: () {
-                      setState(() {
-                        _isSelected[index] = !_isSelected[index];
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+// void main() async{
+//   await testAuth();
+// }
+// Future<void> testAuth() async {
+//   ProvManager.init();
+//   NetworkConfig.init();
+//   AuthReq authReq=AuthRequesterImple();
+//
+//   String email='8209220125@csu.edu.cn';
+//
+//   Result<bool> reqCodeRes= await authReq.requestEmailCode(email);
+//   //read email code from console
+//   String code= '447398';
+//   Result<User> userRes = await authReq.loginWithEmailCode(email, code);
+//   ProvManager.userProv.setUser(userRes.data);
+//   // begin set pwd
+//   String password='abc123';
+//   Result<bool> setPedRes= await authReq.firstSetPwd(email,password);
+//   //begin login
+//   Result<User> loginRes= await authReq.loginWithEmailPwd(email, password);
+//   print('loginRes: $loginRes');
+// }

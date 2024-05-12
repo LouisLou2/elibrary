@@ -7,7 +7,7 @@ class BoxGroove extends StatelessWidget{
   final Widget? title;
   final VoidCallback? titleOnTap;
 
-  final List<Widget>widgets;
+  final List<Widget> widgets;
   const BoxGroove({super.key, this.title,this.titleOnTap,required this.widgets});
 
   @override

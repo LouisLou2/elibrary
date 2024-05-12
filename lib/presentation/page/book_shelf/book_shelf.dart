@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elibrary/presentation/page/add_book_confirm_page.dart';
+import 'package:elibrary/state_management/prov/user_book_prov.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../constant/app_strings.dart';
-import '../widget/custom_image_card.dart';
-import '../widget/info_display/headline2.dart';
+import '../../../constant/app_strings.dart';
+import '../../widget/custom_image_card.dart';
+import '../../widget/info_display/headline2.dart';
 
 class BookShelf extends StatefulWidget {
   BookShelf({super.key});
@@ -22,6 +25,8 @@ class BookShelf extends StatefulWidget {
 class _BookShelfState extends State<BookShelf> {
 
   final GlobalKey<TooltipState> tooltipkey=GlobalKey<TooltipState>();
+  final UserBookProv uprov= ProvManager.userBookProv;
+
   bool _isSelectionMode = false;
   List<bool> _isSelected = List.generate(20, (_) => false);
   String result = '';
@@ -180,15 +185,19 @@ class _BookShelfState extends State<BookShelf> {
                           ),
                         ],
                         child: CustomImageCard(
-                            image: Image.network(
-                              'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                              fit: BoxFit.cover,
-                              width: 220.w,
-                              height: 277.h,
+                          image: CachedNetworkImage(
+                            imageUrl: uprov.bookShelf[index].cover_url,
+                            fit: BoxFit.cover,
+                            width: 220.w,
+                            height: 277.w,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            text: 'Dart Apprentice',
-                            //useSolidColor: true,
-                            surfaceColor: Colors.white
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                          text: uprov.bookShelf[index].title,
+                          //useSolidColor: true,
+                          surfaceColor: Colors.white,
                         ),
                       );
                     },

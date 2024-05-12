@@ -1,6 +1,6 @@
 import 'package:elibrary/constant/app_strings.dart';
 import 'package:elibrary/presentation/page/browse_book_page.dart';
-import 'package:elibrary/presentation/page/home_page.dart';
+import 'package:elibrary/presentation/page/home/home_page.dart';
 import 'package:elibrary/presentation/page/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../style/app_colors.dart';
-import 'book_detail.dart';
-import 'book_shelf.dart';
+import 'book_shelf/book_shelf.dart';
 
 class MainTabsPage extends StatefulWidget{
   const MainTabsPage({super.key});
