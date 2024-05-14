@@ -13,7 +13,7 @@ class SearchResp{
   });
 
   factory SearchResp.fromJson(Map<String, dynamic> json){
-List<Author> authors = [];
+    List<Author> authors = [];
     List<String> publishers = [];
     List<BookInfo> books = [];
     if(json['authors'] != null){

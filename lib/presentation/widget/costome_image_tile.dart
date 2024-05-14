@@ -46,58 +46,64 @@ class CustomImageTile extends StatelessWidget{
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 13.w),
-            child:Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.6,
-                    color: surfaceColor,
-                    fontSize: fontSize,
-                  ),
-                ),
-                if(subTitle!=null)
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(UIParams.defBorderR.r),
+          color: backgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 13.w),
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    subTitle!,
+                    title!,
                     style: TextStyle(
-                      color: surfaceColor2 ?? Theme.of(context).colorScheme.secondary,
-                      fontSize: fontSize2 ?? fontSize!*0.85,
-                      letterSpacing: -0.6,
                       fontWeight: FontWeight.w500,
+                      letterSpacing: -0.6,
+                      color: surfaceColor,
+                      fontSize: fontSize,
                     ),
                   ),
-                SizedBox(height: fontSize!*0.5,),
-                if(thirdTitle!=null)
-                  Text(
-                    thirdTitle!,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: fontSize3 ?? fontSize!*0.75,
+                  if(subTitle!=null)
+                    Text(
+                      subTitle!,
+                      style: TextStyle(
+                        color: surfaceColor2 ?? Theme.of(context).colorScheme.secondary,
+                        fontSize: fontSize2 ?? fontSize!*0.85,
+                        letterSpacing: -0.6,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                if(customTitleWidget!=null)
-                  customTitleWidget!,
-              ],
+                  SizedBox(height: fontSize!*0.5,),
+                  if(thirdTitle!=null)
+                    Text(
+                      thirdTitle!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: fontSize3 ?? fontSize!*0.75,
+                      ),
+                    ),
+                  if(customTitleWidget!=null)
+                    customTitleWidget!,
+                ],
+              ),
             ),
-          ),
-          Card(
-            color: backgroundColor,
-            clipBehavior: Clip.antiAlias,
-            shape: circleImage?const CircleBorder():RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(UIParams.tinyBorderR.r),
+            Card(
+              color: backgroundColor,
+              clipBehavior: Clip.antiAlias,
+              shape: circleImage?const CircleBorder():RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(UIParams.tinyBorderR.r),
+              ),
+              child: image,
             ),
-            child: image,
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }

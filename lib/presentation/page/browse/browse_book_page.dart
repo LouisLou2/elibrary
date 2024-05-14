@@ -1,10 +1,16 @@
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
 import 'package:elibrary/presentation/widget/gradient_image_card.dart';
 import 'package:elibrary/presentation/widget/section_window.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
+import 'package:elibrary/state_management/prov/category_prov.dart';
+import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/nav/navigation_helper.dart';
+import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constant/app_strings.dart';
 import '../../widget/image_tile.dart';
@@ -20,6 +26,7 @@ class BrowseBookPage extends StatefulWidget {
 
 class _BrowseBookPageState extends State<BrowseBookPage> {
 
+  final CategoryProv _cprov = ProvManager.categoryProv;
   late SearchController _searchController;
   late FocusNode _focusNode;
 
@@ -51,7 +58,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
                     child: IconButton(
-                      onPressed: ()=>Navigator.of(context).pushNamed('/reservation_detail'),
+                      onPressed: null,
                       icon: Icon(
                         Icons.notifications_active_outlined,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -104,10 +111,6 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                     onTap: (){
                       Navigator.of(context).pushNamed('/search');
                       _focusNode.unfocus();
-                      print('@@@@@@@@@@@@onTap');
-                    },
-                    onChanged: (_){
-                      print('@@@@@@@@@@@@onChanged');
                     },
                     leading: const Icon(Icons.search),
                     trailing: <Widget>[
@@ -122,28 +125,33 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                 ),
               ),
               const SizedBox(height: UIParams.mediumGap),
-              SectionWindow(
-                title:  AppStrs.hotKind,
-                fontSize: 22,
-                titleOnTap: (){},
-                actionOnTap: (){},
-                actionText: AppStrs.viewAll,
-                widgets: List.generate(6,
+              Selector<CategoryProv, String>(
+                selector: (context,prov)=>prov.mostPopular1Key,
+                builder: (context,_,child)=> SectionWindow(
+                  title:  AppStrs.hotKind,
+                  fontSize: 22,
+                  titleOnTap:() {
+                    NavigationHelper.pushNamed(RouteCollector.category);
+                  },
+                  actionOnTap: null,
+                  actionText: AppStrs.viewAll,
+                  widgets: List.generate( _cprov.mostPopular1.length,
                       (index) => GradientImageCard(
-                    image: Image.network(
-                      'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                      fit: BoxFit.cover,
-                      width: 200,
-                      height: 300,
+                      image: Image.asset(
+                        _cprov.cate1Cover(index),
+                        fit: BoxFit.cover,
+                        width: 200,
+                        height: 300,
+                      ),
+                      text: _cprov.cate1Name(index),
+                      onTap: (){},
                     ),
-                    text: '分类$index',
-                    onTap: (){},
                   ),
                 ),
               ),
               const SizedBox(height: UIParams.mediumGap),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+                padding: const EdgeInsets.only(left: 18,bottom: 10),
                 child: TextActionWidget(
                   text: SpecTextWidget.mediumTitle(text: AppStrs.trending, context: context),
                   size: 22,
@@ -155,23 +163,20 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                 child:Column(
                   children: ListExtension.separate<Widget>(
                     len: 6,
-                    generator: (index)=>GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    generator: (index)=>ImageTile(
                       onTap: ()=>Navigator.of(context).pushNamed('/book_detail'),
-                      child: ImageTile(
-                        title: 'Dart Apprentice',
-                        subTitle: 'Leo Dion, Peter Friese',
-                        thirdTitle: 'Programming',
-                        subtitleColor: Theme.of(context).colorScheme.primary,
-                        image: Image.network(
-                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                          fit: BoxFit.cover,
-                          width: AppRepreConst.mediumBookW.w,
-                          height: AppRepreConst.mediumBookW.w * AppRepreConst.bookCoverRatio,
-                        ),
-                        actionWidget: null,
-                        fontSize: 20,
+                      title: 'Dart Apprentice',
+                      subTitle: 'Leo Dion, Peter Friese',
+                      thirdTitle: 'Programming',
+                      subtitleColor: Theme.of(context).colorScheme.primary,
+                      image: Image.network(
+                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                        fit: BoxFit.cover,
+                        width: AppRepreConst.mediumBookW.w,
+                        height: AppRepreConst.mediumBookW.w * AppRepreConst.bookCoverRatio,
                       ),
+                      actionWidget: null,
+                      fontSize: 20,
                     ),
                     separatorGenerator: (index)=>LayoutBuilder(
                       builder: (BuildContext context,BoxConstraints constraints){

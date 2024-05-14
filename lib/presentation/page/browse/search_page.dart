@@ -15,15 +15,20 @@ import 'package:provider/provider.dart';
 
 import '../../../constant/app_strings.dart';
 import '../../widget/image_tile.dart';
+enum Condition { all, book, author, publisher }
+
+
+
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
-
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
+  
+  Condition calendarView = Condition.all;
 
   final SearchProv _sprov = ProvManager.searchProv;
   Timer? _searchThrottleTimer;
@@ -218,15 +223,43 @@ class _SearchPageState extends State<SearchPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CupertinoSegmentedControl(
+        Padding(
           padding: const EdgeInsets.only(top: 15),
-          onValueChanged: (value) {  },
-          children: {
-            0: _getSegmentedItem('全部'),
-            1: _getSegmentedItem('作者'),
-            2: _getSegmentedItem('图书'),
-            3: _getSegmentedItem('出版社'),
-          },
+          child: SegmentedButton(
+            showSelectedIcon: false,
+            style: SegmentedButton.styleFrom(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+              selectedForegroundColor: CupertinoColors.activeBlue,
+              selectedBackgroundColor: CupertinoColors.activeBlue.withOpacity(0.1),
+            ),
+            segments: <ButtonSegment<Condition>>[
+              ButtonSegment<Condition>(
+                value: Condition.all,
+                label: _getSegmentedItem('全部'),
+              ),
+              ButtonSegment<Condition>(
+                value: Condition.book,
+                label: _getSegmentedItem('图书'),
+              ),
+              ButtonSegment<Condition>(
+                value: Condition.author,
+                label: _getSegmentedItem('作者'),
+              ),
+              ButtonSegment<Condition>(
+                value: Condition.publisher,
+                label: _getSegmentedItem('出版社'),
+              ),
+            ],
+            selected: <Condition>{calendarView},
+            onSelectionChanged: (selected){
+              setState(() {
+                calendarView = selected.first;
+              });
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -320,14 +353,11 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
   Widget _getSegmentedItem(String title){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.normal,
-        ),
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.normal,
       ),
     );
   }

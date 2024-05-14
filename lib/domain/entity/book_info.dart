@@ -1,5 +1,6 @@
-import 'package:elibrary/constant/app_transaction_param.dart';
 import 'package:isar/isar.dart';
+
+import '../../constant/book_const.dart';
 part 'book_info.g.dart';
 
 // isar嵌套对象的字段必须都可空，这不是一个好的设计，所以暂时放弃这个嵌套
@@ -21,18 +22,29 @@ part 'book_info.g.dart';
 @collection
 class BookInfo{
   Id id=Isar.autoIncrement;
-  @Index(unique: true)
+
+  @Index(unique: true,replace: true)
   String isbn;
+
   String title;
   String? originalTitle;
   List<int> authorIds;
   List<String> authorNames;
   String publisher;
+
+  @Index()
   DateTime pubDate;
+
+  @Index()
   int wordCount;
   String? desc;
+
+  @Index()
   int category1;
+
+  @Index()
   int category2;
+
   List<String>? tags;
   String cover_l_url;
   String? cover_m_url;
@@ -79,6 +91,6 @@ class BookInfo{
       ebook_url: map['ebook_url'],
     );
   }
-  String get authorNamesStr=>authorNames.join(',');
-  String get cate1Str=>LibTranscationInfo.getCategory1Name(category1);
+  String get authorNamesStr=>authorNames.join(', ');
+  String get cate1Str=>BookConst.getCategory1Name(category1);
 }

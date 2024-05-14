@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../style/app_colors.dart';
 
 class GradientImageCard extends StatelessWidget {
-  final Image image;
+  final Widget image;
   final String? text;
   final VoidCallback? onTap;
   const GradientImageCard({super.key, required this.image, this.text, this.onTap});

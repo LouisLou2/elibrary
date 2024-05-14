@@ -1,4 +1,5 @@
 import 'package:elibrary/domain/req_model/user_book/reserve_param.dart';
+import 'package:elibrary/state_management/prov/category_prov.dart';
 import 'package:elibrary/state_management/prov/chat_prov.dart';
 import 'package:elibrary/state_management/prov/content_prov.dart';
 import 'package:elibrary/state_management/prov/record_prov.dart';
@@ -37,6 +38,7 @@ class ProvManager{
   static late ChatProv chatProv;
 
   static late SearchProv searchProv;
+  static late CategoryProv categoryProv;
 
   static List<SingleChildWidget> widgets(){
     return [
@@ -57,6 +59,7 @@ class ProvManager{
       ChangeNotifierProvider.value(value: chatProv),
 
       ChangeNotifierProvider.value(value: searchProv),
+      ChangeNotifierProvider.value(value: categoryProv),
     ];
   }
 
@@ -78,6 +81,7 @@ class ProvManager{
     chatProv=ChatProv();
 
     searchProv=SearchProv();
+    categoryProv=CategoryProv();
   }
 
   static initUserState(){

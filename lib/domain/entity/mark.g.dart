@@ -33,7 +33,7 @@ const MarkSchema = CollectionSchema(
       id: 844486483774468129,
       name: r'lastUserId',
       unique: true,
-      replace: false,
+      replace: true,
       properties: [
         IndexPropertySchema(
           name: r'lastUserId',

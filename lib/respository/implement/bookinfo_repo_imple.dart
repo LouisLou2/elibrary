@@ -60,4 +60,29 @@ class BookInfoRepImple implements BookInfoRep {
   Future<Result<SearchResp>> search({required String keyword}) {
     return bookInfoNetDs.search(keyword);
   }
+  @override
+  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num}) {
+    // 先用delayed模拟网络请求
+    List<BookInfo> bookInfos = List.generate(10, (index) =>
+        BookInfo(
+          isbn: '1234567890123',
+          title: 'Dart Apprentice',
+          originalTitle: 'Example Original Title',
+          authorIds: [1, 2],
+          authorNames: ['作者一', '作者二'],
+          publisher: '示例出版社',
+          pubDate: DateTime(2024, 5, 14),
+          wordCount: 50000,
+          desc: '这是一本关于示例的书。',
+          category1: 1,
+          category2: 2,
+          tags: ['示例', '教育', '非虚构'],
+          cover_l_url: 'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+          cover_m_url: 'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+          cover_s_url: 'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+          ebook_url: 'http://example.com/ebook.pdf',
+        ),
+      );
+    return Future.delayed(const Duration(milliseconds: 500), ()=>Result.success(bookInfos));
+  }
 }

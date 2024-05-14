@@ -6,6 +6,7 @@ part 'message.g.dart';
 class AppMessage{
   Id id=Isar.autoIncrement;
   String message;
+
   @Index(composite: [CompositeIndex('receiverId'), CompositeIndex('time')])
   int senderId;
   int receiverId;

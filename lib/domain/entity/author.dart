@@ -4,8 +4,10 @@ part 'author.g.dart';
 @collection
 class Author{
   Id id=Isar.autoIncrement;
-  @Index(unique: true)
+
+  @Index(unique: true,replace: true)
   int authorId;
+
   String name;
   String? desc;
   Author({

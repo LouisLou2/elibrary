@@ -3,6 +3,7 @@ import 'package:elibrary/datasource/network/manage/network_config.dart';
 import 'package:elibrary/datasource/network/manage/network_manager.dart';
 import 'package:elibrary/domain/entity/book.dart';
 import 'package:elibrary/domain/entity/book_info.dart';
+import 'package:elibrary/domain/resp_model/book_info/book_list_resp.dart';
 import 'package:elibrary/domain/resp_model/book_info/reco_books_resp.dart';
 import 'package:elibrary/domain/resp_model/book_info/search_resp.dart';
 import 'package:elibrary/domain/resp_model/user_book/book_owner_resp.dart';
@@ -159,5 +160,35 @@ class BookInfoNetDsImple implements BookInfoNetDs{
       ),
       ),
     ));
+  }
+
+  @override
+  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num}) async {
+    _cancelToken=CancelToken();
+    try{
+      return _bookInfoDio.get(
+        NetworkPathCollector.category_book,
+        data: {
+          'category1':category1,
+          'category2':category2,
+          'offset':offset,
+          'num':num,
+        },
+        options: NetworkConfig.json_json,
+        cancelToken: _cancelToken,
+      ).then(
+         (response) {
+          RespBody respBody=RespBody.fromJson(response.data);
+          if(respBody.code==ResCode.SUCCESS){
+            List<BookInfo> bookInfos= BookListResp.fromJson(respBody.data).bookList;
+            return Result.success(bookInfos);
+          }else{
+            return Result.abnormal(respBody.code);
+          }
+        }
+      );
+    }catch(e){
+      return GlobalExceptionHelper.getErrorResInfo<List<BookInfo>>(e);
+    }
   }
 }

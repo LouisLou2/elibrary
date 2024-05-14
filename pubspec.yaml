@@ -93,8 +93,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/book_cover/category1/
     - assets/fonts/
-    - assets/files/
     - assets/icons/
   # To add assets to your application, add an assets section, like this:
   # assets:

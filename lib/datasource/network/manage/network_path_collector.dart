@@ -29,6 +29,11 @@ class NetworkPathCollector {
   */
   static const String search = "$book/search";
   /*
+  * /book/category
+  * get: 用于获取某个分类下的书籍
+   */
+  static const String category_book = "$book/category";
+  /*
    * book_detail
    * get: 用于获取书籍信息
    */

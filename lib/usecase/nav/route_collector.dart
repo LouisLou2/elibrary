@@ -1,14 +1,17 @@
 import 'package:elibrary/presentation/page/browse/search_page.dart';
+import 'package:elibrary/presentation/page/category/category_book.dart';
 import 'package:elibrary/presentation/page/content/ebook_preview.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/record/non_reservation_detail.dart';
 import 'package:elibrary/presentation/page/reservation/booking_page.dart';
 import 'package:elibrary/presentation/page/reservation/reservation_detail.dart';
 import 'package:elibrary/presentation/page/user_lending/browse_user_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/page/auth/auth_pages.dart';
 import '../../presentation/page/auth/set_pwd_page.dart';
+import '../../presentation/page/category/category_page.dart';
 import '../../presentation/page/content/book_detail.dart';
 import '../../presentation/page/onboarding_page.dart';
 import '../../presentation/page/record/record_page.dart';
@@ -39,6 +42,8 @@ class RouteCollector {
   static const String ebook_preview = '/ebook_preview';
 
   static const String search = '/search';
+  static const String category = '/category';
+  static const String category_book = '/category_book';
 
   static const Set<String> simpleRoutes = {
     onboarding,
@@ -62,6 +67,8 @@ class RouteCollector {
     ebook_preview,
 
     search,
+    category,
+    category_book,
   };
 
   // specialRoutes中的路由不会在路由表中注册，而是在RouteGenerator中动态生成,因为这些路由需要用户满足某种条件才能跳转
@@ -91,7 +98,8 @@ class RouteCollector {
     ebook_preview: (context)=>const EbookPreviewPage(),
 
     search: (context) => const SearchPage(),
-
+    category: (context) => const CategoryPage(),
+    category_book: (context) => const CategoryBook(),
   };
   // {
   // '/book_detail':(context)=>const BookDetail(),

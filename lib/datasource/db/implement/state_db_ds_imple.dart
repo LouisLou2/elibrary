@@ -28,10 +28,10 @@ class StateDbDsImple implements StateDbDs {
   @override
   Future<void> saveUser(User user) async {
     DBManager.db.writeTxn(() async {
-      final userInDb = await DBManager.db.users.where().userIdEqualTo(user.userId).findFirst();
-      if(userInDb!=null){
-        user.id=userInDb.id;
-      }
+      // final userInDb = await DBManager.db.users.where().userIdEqualTo(user.userId).findFirst();
+      // if(userInDb!=null){
+      //   user.id=userInDb.id;
+      // }用于哪里唯一键加了replace:true, 会场僧覆盖而不是为一项约束异常，这里没必要查找原来的数据
       DBManager.db.users.put(user);
     });
   }

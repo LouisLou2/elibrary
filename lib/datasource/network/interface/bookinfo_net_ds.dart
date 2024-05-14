@@ -1,4 +1,3 @@
-import 'package:elibrary/domain/resp_model/user_lending/record_list_resp.dart';
 import 'package:elibrary/domain/util_model/res_info.dart';
 
 import '../../../domain/entity/book.dart';
@@ -14,4 +13,6 @@ abstract class BookInfoNetDs {
   Future<Result<List<BookInfo>>> getRecoBooks(int offset, int num);
 
   Future<Result<SearchResp>> search(String keyword);
+
+  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num});
 }

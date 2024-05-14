@@ -22,13 +22,18 @@ const AuthorSchema = CollectionSchema(
       name: r'authorId',
       type: IsarType.long,
     ),
-    r'desc': PropertySchema(
+    r'avatarStr': PropertySchema(
       id: 1,
+      name: r'avatarStr',
+      type: IsarType.string,
+    ),
+    r'desc': PropertySchema(
+      id: 2,
       name: r'desc',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     )
@@ -43,7 +48,7 @@ const AuthorSchema = CollectionSchema(
       id: 8112877077417469315,
       name: r'authorId',
       unique: true,
-      replace: false,
+      replace: true,
       properties: [
         IndexPropertySchema(
           name: r'authorId',
@@ -67,6 +72,7 @@ int _authorEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.avatarStr.length * 3;
   {
     final value = object.desc;
     if (value != null) {
@@ -84,8 +90,9 @@ void _authorSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.authorId);
-  writer.writeString(offsets[1], object.desc);
-  writer.writeString(offsets[2], object.name);
+  writer.writeString(offsets[1], object.avatarStr);
+  writer.writeString(offsets[2], object.desc);
+  writer.writeString(offsets[3], object.name);
 }
 
 Author _authorDeserialize(
@@ -96,8 +103,8 @@ Author _authorDeserialize(
 ) {
   final object = Author(
     authorId: reader.readLong(offsets[0]),
-    desc: reader.readStringOrNull(offsets[1]),
-    name: reader.readString(offsets[2]),
+    desc: reader.readStringOrNull(offsets[2]),
+    name: reader.readString(offsets[3]),
   );
   object.id = id;
   return object;
@@ -113,8 +120,10 @@ P _authorDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -410,6 +419,136 @@ extension AuthorQueryFilter on QueryBuilder<Author, Author, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'avatarStr',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'avatarStr',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'avatarStr',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'avatarStr',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterFilterCondition> avatarStrIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'avatarStr',
+        value: '',
       ));
     });
   }
@@ -758,6 +897,18 @@ extension AuthorQuerySortBy on QueryBuilder<Author, Author, QSortBy> {
     });
   }
 
+  QueryBuilder<Author, Author, QAfterSortBy> sortByAvatarStr() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'avatarStr', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterSortBy> sortByAvatarStrDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'avatarStr', Sort.desc);
+    });
+  }
+
   QueryBuilder<Author, Author, QAfterSortBy> sortByDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'desc', Sort.asc);
@@ -793,6 +944,18 @@ extension AuthorQuerySortThenBy on QueryBuilder<Author, Author, QSortThenBy> {
   QueryBuilder<Author, Author, QAfterSortBy> thenByAuthorIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'authorId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterSortBy> thenByAvatarStr() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'avatarStr', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Author, Author, QAfterSortBy> thenByAvatarStrDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'avatarStr', Sort.desc);
     });
   }
 
@@ -840,6 +1003,13 @@ extension AuthorQueryWhereDistinct on QueryBuilder<Author, Author, QDistinct> {
     });
   }
 
+  QueryBuilder<Author, Author, QDistinct> distinctByAvatarStr(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'avatarStr', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Author, Author, QDistinct> distinctByDesc(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -865,6 +1035,12 @@ extension AuthorQueryProperty on QueryBuilder<Author, Author, QQueryProperty> {
   QueryBuilder<Author, int, QQueryOperations> authorIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'authorId');
+    });
+  }
+
+  QueryBuilder<Author, String, QQueryOperations> avatarStrProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'avatarStr');
     });
   }
 

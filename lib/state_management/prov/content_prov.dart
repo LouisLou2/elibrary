@@ -22,7 +22,6 @@ class ContentProv with ChangeNotifier {
     recommendBooks.addAll(books.map((e) => Book(bookInfo: e)).toList());
     notifyListeners();
   }
-  /*---------Other------------------*/
-  List<Book> historyBooks = [];
-  List<Book> trendBooks = [];
+  /*---------ForTrend------------------*/
+
 }

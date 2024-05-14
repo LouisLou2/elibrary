@@ -34,5 +34,5 @@ class SimpleUser {
 
   String get roleStr => role ? '老师' : '同学';
   String get avatarStr => name.isNotEmpty ? name[0] : 'U';
-  String get locationStr => AppTransactionParam.getCampusName(location);
+  String get locationStr =>LibTranscationInfo.getCampusName(location);
 }

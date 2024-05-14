@@ -15,4 +15,6 @@ abstract class BookInfoRep {
   Future<Result<List<BookInfo>>> getRecoBooks({required int offset, required int num});
 
   Future<Result<SearchResp>> search({required String keyword,});
+
+  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num});
 }

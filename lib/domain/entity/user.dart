@@ -5,10 +5,13 @@ part 'user.g.dart';
 @collection
 class User{
   Id id=Isar.autoIncrement;
-  @Index(unique: true)
+
+  @Index(unique: true,replace: true)
   int userId;
-  @Index(unique: true)
+
+  @Index(unique: true,replace: true)
   String email;
+
   String name;
   bool role;
   int? location;

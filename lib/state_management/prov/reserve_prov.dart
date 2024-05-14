@@ -54,9 +54,9 @@ class ReserveProv with ChangeNotifier {
     now = DateTime.now();
     addHour=0;
     addDays=0;
-    if(now.hour>=AppTransactionParam.libClose){
+    if(now.hour >= LibTranscationInfo.libClose){
       leastBeginDays = 1;
-      beginHour = AppTransactionParam.libOpen;
+      beginHour = LibTranscationInfo.libOpen;
     }
     else{
       leastBeginDays = 0;

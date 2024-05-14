@@ -156,7 +156,7 @@ class _BookingPageState extends State<BookingPage> {
                               diameterRatio: 1,
                               useMagnifier: true,
                               magnification: 1.5,
-                              children: List.generate(AppTransactionParam.maxKeepDays, (index) {
+                              children: List.generate(LibTranscationInfo.maxKeepDays, (index) {
                                 String dayStr = '';
                                 if(_rprov.leastBeginDays==0&&index==0){
                                   dayStr = 'TODAY';
@@ -185,7 +185,7 @@ class _BookingPageState extends State<BookingPage> {
                               useMagnifier: true,
                               magnification: 1.4,
                               onSelectedItemChanged: (index)=>_rprov.setAddHour(index),
-                              children: List.generate(AppTransactionParam.libClose-_rprov.beginHour, (index) {
+                              children: List.generate(LibTranscationInfo.libClose-_rprov.beginHour, (index) {
                                 return Text(FormatTool.hourStr(index+_rprov.beginHour),
                                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                     fontWeight: FontWeight.w500,
