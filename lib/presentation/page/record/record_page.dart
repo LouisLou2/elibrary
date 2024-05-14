@@ -1,8 +1,10 @@
-import 'package:elibrary/presentation/page/record_list_view.dart';
+import 'package:elibrary/presentation/page/record/record_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../style/ui_params.dart';
+import '../../../state_management/prov/record_prov.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../../style/ui_params.dart';
 
 enum RecordType { all, reservation, borrow}
 
@@ -13,8 +15,10 @@ class RecordPage extends StatefulWidget {
 }
 
 class _RecordPageState extends State<RecordPage> {
-  RecordType _calendar = RecordType.all;
+
+  final RecordType _calendar = RecordType.all;
   late final SearchController _searchController=SearchController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,27 +146,17 @@ class _RecordPageState extends State<RecordPage> {
                       ],
                       selected: <RecordType>{_calendar},
                       onSelectionChanged: (Set<RecordType> newSelection) {
-                          setState(() {
-                            _calendar = newSelection.first;
-                          }
-                        );
-                      }
+                      //   setState(() {
+                      //     _calendar = newSelection.first;
+                      //   }
+                      // );
+                    }
                   ),
                 ),
               ],
             ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 0),
-                    child: RecordView(),
-                  ),
-                  Center(child:Text('Page One', style: Theme.of(context).textTheme.bodyLarge),),
-                  Center(child:Text('Page One', style: Theme.of(context).textTheme.bodyLarge),),
-                ],
-              ),
+            const Expanded(
+              child: RecordView(),
             ),
           ],
         ),

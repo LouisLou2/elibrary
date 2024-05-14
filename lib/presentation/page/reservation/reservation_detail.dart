@@ -1,10 +1,16 @@
+import 'package:elibrary/constant/app_transaction_param.dart';
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../constant/app_strings.dart';
+import '../../../state_management/prov/record_prov.dart';
+import '../../../state_management/prov_manager.dart';
 import '../../widget/info_display/headline2.dart';
 
 class ReservationDetail extends StatefulWidget {
@@ -15,12 +21,7 @@ class ReservationDetail extends StatefulWidget {
 }
 
 class _ReservationDetailState extends State<ReservationDetail> {
-  List<String>rules=[
-    '请在预约时间内到达图书馆取书',
-    '请取书时请出示您的学生证',
-    '请在规定时间内归还图书',
-    '在您未取书时，馆内藏书依然对所有读者开放，可能会出现书籍在取书时已被借走的情况，敬请谅解',
-  ];
+  final RecordProv _rprov=ProvManager.recordProv;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +43,7 @@ class _ReservationDetailState extends State<ReservationDetail> {
                   ),
                   SizedBox(height: UIParams.mediumGap.h,),
                   Text(
-                    '剩余1天22时34分59秒',
+                    '剩余${FormatTool.timeLeftStr(_rprov.nowRecord.dueTime)}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15.sp,
@@ -84,7 +85,8 @@ class _ReservationDetailState extends State<ReservationDetail> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '铁道校区图书馆',
+                                  _rprov.nowRecord.libName,
+                                  overflow: TextOverflow.ellipsis,
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                                   ),
@@ -132,7 +134,8 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Dart Apprentice',
+                                      FormatTool.trimText(_rprov.nowRecord.bookInfo.title, maxLength: 20),
+                                      overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                         fontSize: 19,
                                         fontWeight: FontWeight.w500,
@@ -140,7 +143,7 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                       ),
                                     ),
                                     Text(
-                                      'Olivier Leplus',
+                                      FormatTool.trimText(_rprov.nowRecord.bookInfo.authorNamesStr,maxLength: 35),
                                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: Theme.of(context).colorScheme.secondary,
                                       ),
@@ -153,7 +156,7 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                       ),
                                     ),
                                     Text(
-                                      'OG567 345IX',
+                                      'TYUU OPYG',
                                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: Theme.of(context).colorScheme.secondary,
                                       ),
@@ -172,13 +175,13 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                               ),
                                             ),
                                             Text(
-                                              '2021-10-12',
+                                              FormatTool.dateScaleStr2(_rprov.nowRecord.reserveTime),
                                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),
                                             ),
                                             Text(
-                                              '19:36',
+                                              FormatTool.hourStr(_rprov.nowRecord.reserveTime.hour),
                                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),
@@ -196,13 +199,13 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                               ),
                                             ),
                                             Text(
-                                              '2021-10-12',
+                                              FormatTool.dateScaleStr2(_rprov.nowRecord.dueTime),
                                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),
                                             ),
                                             Text(
-                                              '19:36',
+                                              FormatTool.hourStr(_rprov.nowRecord.dueTime.hour),
                                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),
@@ -213,15 +216,12 @@ class _ReservationDetailState extends State<ReservationDetail> {
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  width: 90.w,
-                                  height: 110.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    image: const DecorationImage(
-                                      image: NetworkImage('https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg'),
-                                      fit: BoxFit.cover,
-                                    ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(UIParams.smallBorderR),
+                                  child: getCustomCachedImage(
+                                    url: _rprov.nowRecord.bookInfo.cover_l_url,
+                                    width: 90.w,
+                                    height: 110.h,
                                   ),
                                 ),
                               ],
@@ -246,7 +246,7 @@ class _ReservationDetailState extends State<ReservationDetail> {
                           _getDivider(context,50.w),
                           SizedBox(height: UIParams.mediumGap.h,),
                           QrImageView(
-                            data: 'This is a simple QR code',
+                            data: _rprov.nowRecord.reserveCode,
                             version: QrVersions.auto,
                             size: 200,
                             gapless: false,
@@ -270,7 +270,8 @@ class _ReservationDetailState extends State<ReservationDetail> {
                           OutlinedButton(
                             onPressed: null,
                             child: Text(
-                              'OG567 345IX',
+                              _rprov.nowRecord.reserveCode,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
@@ -365,15 +366,15 @@ class _ReservationDetailState extends State<ReservationDetail> {
                             ),
                             _getDivider(context,70.w),
                             SizedBox(height: UIParams.mediumGap.h,),
-                            ...List.generate(rules.length, (index) => Text(
-                              rules[index],
+                            ...List.generate(LibTranscationInfo.libRules.length, (index) => Text(
+                              LibTranscationInfo.libRules[index],
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 5,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
-                            )).toList(),
+                            )),
                           ],
                         ),
                       ),

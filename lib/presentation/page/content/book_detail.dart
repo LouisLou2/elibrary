@@ -1,22 +1,35 @@
+import 'package:elibrary/constant/situation_enum.dart';
+import 'package:elibrary/extension/core_extension.dart';
+import 'package:elibrary/presentation/helper/toast_helper.dart';
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
 import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:elibrary/presentation/widget/text_action_widget.dart';
+import 'package:elibrary/state_management/prov/content_prov.dart';
+import 'package:elibrary/usecase/handler/user_book_handler.dart';
+import 'package:elibrary/usecase/handler/user_lend_handler.dart';
+import 'package:elibrary/usecase/nav/navigation_helper.dart';
+import 'package:elibrary/usecase/nav/route_collector.dart';
+import 'package:elibrary/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../constant/app_strings.dart';
-import '../../style/ui_params.dart';
-import '../general/general_ui_settings.dart';
-import '../widget/Image_card_with_info.dart';
+import '../../../constant/app_strings.dart';
+import '../../../domain/entity/book_info.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../../style/ui_params.dart';
+import '../../general/general_ui_settings.dart';
+import '../../widget/Image_card_with_info.dart';
 
-class BookConfirmPage extends StatefulWidget{
-  const BookConfirmPage({super.key});
+class BookDetail extends StatefulWidget{
+  const BookDetail({super.key});
   @override
-  State<BookConfirmPage> createState() => _BookConfirmPageState();
+  State<BookDetail> createState() => _BookDetailState();
 }
 
-class _BookConfirmPageState extends State<BookConfirmPage>{
+class _BookDetailState extends State<BookDetail>{
+  final ContentProv _cprov = ProvManager.contentProv;
 
   @override
   Widget build(BuildContext context){
@@ -24,21 +37,43 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
       extendBodyBehindAppBar: true,// must set to true
       extendBody: true,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(30.h),
+        preferredSize: Size.fromHeight(45.h),
         child: FilterWidget(
           sigmaX: 18,
           sigmaY: 18,
           child: AppBar(
-            automaticallyImplyLeading: false,
             systemOverlayStyle: GeneralUISettings.sysUIOverlayStyle_light,
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
+            title: Text(
+              _cprov.currentDetailBook.bookInfo.title,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                letterSpacing: -0.6,
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            leading: IconButton(
+              onPressed: null,
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             actions: [
               IconButton(
-                onPressed: ()=>Navigator.of(context).pop(),
+                onPressed: null,
                 icon: Icon(
-                  CupertinoIcons.xmark_circle,
+                  Icons.add,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              IconButton(
+                onPressed: null,
+                icon: Icon(
+                  Icons.more_vert,
                   color: Theme.of(context).primaryColor,
                 ),
               ),
@@ -59,39 +94,65 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 constraints: BoxConstraints(
                   minHeight: 40.h,
                 ),
-                child:FilledButton(
+                child: _cprov.currentDetailBook.canReadOnline() ? FilledButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary.withOpacity(0.12)),
                   ),
-                  onPressed: null,
+                  onPressed: (){
+                    NavigationHelper.pushNamed(RouteCollector.ebook_preview);
+                  },
                   child: Text(
-                    AppStrs.cancel,
+                    AppStrs.readOnline,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ):
+                FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary.withOpacity(0.12)),
+                  ),
+                  onPressed: ()=>_notifyWarning(AppStrs.cantReadOnline),
+                  child: Text(
+                    AppStrs.cantReadOnline,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-              ),
+              )
             ),
             SizedBox(width: UIParams.mediumGap.w),
             Expanded(
-                child: Container(
-                  constraints: BoxConstraints(
-                    minHeight: 40.h,
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: 40.h,
+                ),
+                child: _cprov.currentDetailBook.available() ? FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
                   ),
-                  child:FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.9)),
-                    ),
-                    onPressed: ()=>Navigator.of(context).pushNamed('/booking'),
-                    child: Text(
-                      AppStrs.put_book,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+                  onPressed: ()=> UserBookHandler.enterReservePage(_cprov.currentDetailBook),
+                  child: Text(
+                    AppStrs.toBorrow,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
-                )
+                ):
+                FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                  ),
+                  onPressed: ()=>_notifyWarning(AppStrs.noResouce),
+                  child: Text(
+                    AppStrs.noResouce,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -122,9 +183,10 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                       child: ClipRRect(
                         clipBehavior: Clip.antiAlias,
                         borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-                        child: Image.network(
-                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                          fit: BoxFit.cover,
+                        child: getCustomCachedImage(
+                          // TODO: 这列url应该有一个错误url,而不是空字符串
+                          url: _cprov.currentDetailBook.bookInfo.cover_l_url??'',
+                          //TODO: 这里尺寸太随便了
                           width: 150,
                           height: 200,
                         ),
@@ -135,7 +197,8 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Dart Apprentice',
+                      _cprov.currentDetailBook.bookInfo.title,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.7,
@@ -147,7 +210,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Author: Jonathon Sandusky',
+                    _cprov.currentDetailBook.bookInfo.authorNamesStr,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       letterSpacing: -0.7,
                       fontSize: 18,
@@ -159,7 +222,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildKindWidget('Programming'),
+                    _buildKindWidget(_cprov.currentDetailBook.bookInfo.cate1Str),
                   ],
                 ),
                 SizedBox(height: UIParams.mediumGap.h),
@@ -175,7 +238,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                   thickness: 1.0,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ],
+              ]
             ),
           ),
           Padding(
@@ -251,7 +314,8 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '397',
+                          '${_cprov.currentDetailBook.bookInfo.wordCount}',
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                             letterSpacing: -0.7,
@@ -270,7 +334,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                       ],
                     ),
                     Text(
-                      '2021.12.6 出版',
+                      '${FormatTool.dateScaleStr(_cprov.currentDetailBook.bookInfo.pubDate)} 出版',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         letterSpacing: -0.8,
                         fontSize: 13,
@@ -295,7 +359,8 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                       size: 33,
                     ),
                     Text(
-                      '人民邮电出版社',
+                      _cprov.currentDetailBook.bookInfo.publisher,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         letterSpacing: -0.8,
                         fontSize: 13,
@@ -330,8 +395,8 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 ),
                 SelectionArea(
                   child: Text(
+                    _cprov.currentDetailBook.bookInfo.desc??'',
                     overflow: TextOverflow.ellipsis,
-                    """There are many programming languages you can start learning today. But not many are as modern, easy to learn, object-oriented and scalable as Dart. Plus, combined with Flutter, Dart allows you to build native iOS, Android, web and desktop applications with a single code base. Dart Apprentice will teach you all the basic concepts you need to master this language. Follow along with the clearly and thoroughly explained concepts and you’ll be building Dart applications in a breeze.""",
                     maxLines: 4,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       letterSpacing: -0.8,
@@ -359,20 +424,86 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                 ),
                 Divider(
                   height: 15.h,
-                  thickness: 1.0,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 BoxGroove(
-                  widgets: [
-                    _buildAvailableWidget(item: '校本部图书馆', context: context),
-                    SizedBox(width: UIParams.smallGap.w),
-                    _buildAvailableWidget(item: '新校区图书馆', context: context),
-                    SizedBox(width: UIParams.smallGap.w),
-                    _buildAvailableWidget(item: '铁道校区图书馆', context: context,isAvailable: false),
-                  ],
+                  widgets: ListExtension.separate<Widget>(
+                    len: _cprov.currentDetailBook.owners!.length,
+                    separatorGenerator: (index)=>SizedBox(width: UIParams.smallGap.h),
+                    generator: (index)=>_buildAvailableWidget(item: _cprov.currentDetailBook.owners![index].libName, context: context),
+                  ),
+                ),
+                SizedBox(height: UIParams.mediumGap.h),
+                TextActionWidget(
+                  surfaceColor: Theme.of(context).colorScheme.primary,
+                  onTap: _attemptToBorrowFromUser,
+                  text: SpecTextWidget.smallTitle(
+                    text:'向其他读者借阅',
+                    context: context,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),
           ),
+          SizedBox(height: UIParams.largerGap.h),
+          Padding(
+            padding: EdgeInsets.only(left: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '其他版本',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    letterSpacing: -0.8,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                Divider(
+                  height: 15.h,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                BoxGroove(
+                  widgets: List.generate(2,
+                        (index) => ImageInfoBox(
+                      image: Image.network(
+                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                        fit: BoxFit.cover,
+                        width: 130,
+                        height: 180,
+                      ),
+                      title: '愤怒的葡萄',
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: UIParams.largerGap.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: BoxGroove(
+                title: SpecTextWidget.smallTitle(text: '更多Jonathon Sandusky作品',context: context),
+                widgets: List.generate(2,
+                      (index) => ImageInfoBox(
+                    image: Image.network(
+                      'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                      fit: BoxFit.cover,
+                      width: 130,
+                      height: 180,
+                    ),
+                    title: '愤怒的葡萄',
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: UIParams.largerGap.h),
         ],
       ),
     );
@@ -401,8 +532,8 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 11.w,vertical: 10.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-        color: isAvailable ? Theme.of(context).colorScheme.primary:Theme.of(context).disabledColor,
+          borderRadius: BorderRadius.circular(UIParams.smallBorderR),
+          color: isAvailable ? Theme.of(context).colorScheme.primary:Theme.of(context).disabledColor,
       ),
       child: Row(
         children: [
@@ -420,5 +551,14 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
         ],
       ),
     );
+  }
+  void _notifyWarning(String title){
+    ToastHelper.showToasterWithParam(
+      title: title,
+      situaCode: SituationEnum.WARNING,
+    );
+  }
+  void _attemptToBorrowFromUser(){
+    UserLendHandler.enterUserListPage(_cprov.currentDetailBook.bookInfo);
   }
 }

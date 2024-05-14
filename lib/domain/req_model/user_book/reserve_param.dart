@@ -1,22 +1,21 @@
+import 'package:elibrary/util/format_util.dart';
+
 class ReserveParam {
   final String isbn;//书籍isbn
-  int lib_id;//图书馆id
-  DateTime reserve_time;//预约取书时间
-  int keep_days;//保留时间
+  int libId;//图书馆id
+  DateTime dueTime;//归还时间
 
   ReserveParam({
     required this.isbn,
-    required this.lib_id,
-    required this.reserve_time,
-    required this.keep_days,
+    required this.libId,
+    required this.dueTime,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'isbn': isbn,
-      'lib_id': lib_id,
-      'reserve_time': reserve_time,
-      'keep_days': keep_days,
+      'lib_id': libId,
+      'due_time': FormatTool.transferTimeStr(dueTime),
     };
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 extension ListExtension on List {
-  static List<T> separate<T>(int len, T Function(int) generator,T Function(int) separatorGenerator){
+  static List<T> separate<T>({required int len, required T Function(int) generator, required T Function(int) separatorGenerator}){
     assert(len>=0);
     List<T> res=[];
     for(int i=0;i<len-1;++i){

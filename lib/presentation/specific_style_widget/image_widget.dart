@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 Widget getCustomCachedImage({
   required String url,
-  required double width,
-  required double height,
+  double? width,
+  double? height,
 }){
   return CachedNetworkImage(
     imageUrl: url,

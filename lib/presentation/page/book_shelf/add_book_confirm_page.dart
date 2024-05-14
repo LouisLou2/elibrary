@@ -1,22 +1,26 @@
-import 'package:elibrary/presentation/specific_style_widget/text_widget.dart';
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
-import 'package:elibrary/presentation/widget/text_action_widget.dart';
+import 'package:elibrary/state_management/prov/book_shelf_prov.dart';
+import 'package:elibrary/usecase/handler/user_book_handler.dart';
+import 'package:elibrary/util/format_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../constant/app_strings.dart';
-import '../../style/ui_params.dart';
-import '../general/general_ui_settings.dart';
-import '../widget/Image_card_with_info.dart';
+import '../../../constant/app_strings.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../../style/ui_params.dart';
+import '../../general/general_ui_settings.dart';
 
-class BookDetail extends StatefulWidget{
-  const BookDetail({super.key});
+class BookConfirmPage extends StatefulWidget{
+  const BookConfirmPage({super.key});
   @override
-  State<BookDetail> createState() => _BookDetailState();
+  State<BookConfirmPage> createState() => _BookConfirmPageState();
 }
 
-class _BookDetailState extends State<BookDetail>{
+class _BookConfirmPageState extends State<BookConfirmPage>{
+  final BookShelfProv _bprov = ProvManager.bookshelfProv;
 
   @override
   Widget build(BuildContext context){
@@ -24,42 +28,21 @@ class _BookDetailState extends State<BookDetail>{
       extendBodyBehindAppBar: true,// must set to true
       extendBody: true,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(45.h),
+        preferredSize: Size.fromHeight(30.h),
         child: FilterWidget(
           sigmaX: 18,
           sigmaY: 18,
           child: AppBar(
+            automaticallyImplyLeading: false,
             systemOverlayStyle: GeneralUISettings.sysUIOverlayStyle_light,
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
-            title: Text(
-              'Dart Apprentice',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                letterSpacing: -0.6,
-                fontSize: 18,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-            leading: IconButton(
-              onPressed: null,
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
             actions: [
               IconButton(
-                onPressed: null,
+                onPressed: ()=>Navigator.of(context).pop(),
                 icon: Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              IconButton(
-                onPressed: null,
-                icon: Icon(
-                  Icons.more_vert,
+                  CupertinoIcons.xmark_circle,
                   color: Theme.of(context).primaryColor,
                 ),
               ),
@@ -86,33 +69,33 @@ class _BookDetailState extends State<BookDetail>{
                   ),
                   onPressed: null,
                   child: Text(
-                    AppStrs.readOnline,
+                    AppStrs.cancel,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-              )
+              ),
             ),
             SizedBox(width: UIParams.mediumGap.w),
             Expanded(
-              child: Container(
-                constraints: BoxConstraints(
-                  minHeight: 40.h,
-                ),
-                child:FilledButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.9)),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: 40.h,
                   ),
-                  onPressed: ()=>Navigator.of(context).pushNamed('/booking'),
-                  child: Text(
-                    AppStrs.toBorrow,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                  child:FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.9)),
+                    ),
+                    onPressed: putConfirmed,
+                    child: Text(
+                      AppStrs.put_book,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                     ),
                   ),
-                ),
-              )
+                )
             ),
           ],
         ),
@@ -143,9 +126,8 @@ class _BookDetailState extends State<BookDetail>{
                       child: ClipRRect(
                         clipBehavior: Clip.antiAlias,
                         borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-                        child: Image.network(
-                          'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                          fit: BoxFit.cover,
+                        child: getCustomCachedImage(
+                          url: _bprov.confirmBookInfo.cover_l_url,
                           width: 150,
                           height: 200,
                         ),
@@ -156,7 +138,8 @@ class _BookDetailState extends State<BookDetail>{
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Dart Apprentice',
+                    _bprov.confirmBookInfo.title,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       letterSpacing: -0.7,
@@ -168,7 +151,8 @@ class _BookDetailState extends State<BookDetail>{
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Author: Jonathon Sandusky',
+                    _bprov.confirmBookInfo.authorNamesStr,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       letterSpacing: -0.7,
                       fontSize: 18,
@@ -180,7 +164,7 @@ class _BookDetailState extends State<BookDetail>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildKindWidget('Programming'),
+                    _buildKindWidget(_bprov.confirmBookInfo.cate1Str),
                   ],
                 ),
                 SizedBox(height: UIParams.mediumGap.h),
@@ -196,7 +180,7 @@ class _BookDetailState extends State<BookDetail>{
                   thickness: 1.0,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ]
+              ],
             ),
           ),
           Padding(
@@ -272,7 +256,7 @@ class _BookDetailState extends State<BookDetail>{
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '397',
+                          '${_bprov.confirmBookInfo.wordCount}',
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                             letterSpacing: -0.7,
@@ -291,7 +275,8 @@ class _BookDetailState extends State<BookDetail>{
                       ],
                     ),
                     Text(
-                      '2021.12.6 出版',
+                      '${FormatTool.dateScaleStr(_bprov.confirmBookInfo.pubDate)} 出版',
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         letterSpacing: -0.8,
                         fontSize: 13,
@@ -316,7 +301,8 @@ class _BookDetailState extends State<BookDetail>{
                       size: 33,
                     ),
                     Text(
-                      '人民邮电出版社',
+                      _bprov.confirmBookInfo.publisher,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         letterSpacing: -0.8,
                         fontSize: 13,
@@ -352,7 +338,7 @@ class _BookDetailState extends State<BookDetail>{
                 SelectionArea(
                   child: Text(
                     overflow: TextOverflow.ellipsis,
-                    """There are many programming languages you can start learning today. But not many are as modern, easy to learn, object-oriented and scalable as Dart. Plus, combined with Flutter, Dart allows you to build native iOS, Android, web and desktop applications with a single code base. Dart Apprentice will teach you all the basic concepts you need to master this language. Follow along with the clearly and thoroughly explained concepts and you’ll be building Dart applications in a breeze.""",
+                    _bprov.confirmBookInfo.desc??"暂无简介",
                     maxLines: 4,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       letterSpacing: -0.8,
@@ -364,104 +350,6 @@ class _BookDetailState extends State<BookDetail>{
               ],
             ),
           ),
-          SizedBox(height: UIParams.largeGap.h),
-          Padding(
-            padding: EdgeInsets.only(left: 20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '资源',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    letterSpacing: -0.8,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                Divider(
-                  height: 15.h,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                BoxGroove(
-                  widgets: [
-                    _buildAvailableWidget(item: '校本部图书馆', context: context),
-                    SizedBox(width: UIParams.smallGap.w),
-                    _buildAvailableWidget(item: '新校区图书馆', context: context),
-                    SizedBox(width: UIParams.smallGap.w),
-                    _buildAvailableWidget(item: '铁道校区图书馆', context: context,isAvailable: false),
-                  ],
-                ),
-                SizedBox(height: UIParams.mediumGap.h),
-                TextActionWidget(
-                  surfaceColor: Theme.of(context).colorScheme.primary,
-                  onTap: ()=>Navigator.of(context).pushNamed('/user_list'),
-                  text: SpecTextWidget.smallTitle(
-                    text:'向其他读者借阅',
-                    context: context,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: UIParams.largerGap.h),
-          Padding(
-            padding: EdgeInsets.only(left: 20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '其他版本',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    letterSpacing: -0.8,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                Divider(
-                  height: 15.h,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                BoxGroove(
-                  widgets: List.generate(2,
-                        (index) => ImageInfoBox(
-                      image: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                        fit: BoxFit.cover,
-                        width: 130,
-                        height: 180,
-                      ),
-                      title: '愤怒的葡萄',
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: UIParams.largerGap.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: BoxGroove(
-                title: SpecTextWidget.smallTitle(text: '更多Jonathon Sandusky作品',context: context),
-                widgets: List.generate(2,
-                      (index) => ImageInfoBox(
-                    image: Image.network(
-                      'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                      fit: BoxFit.cover,
-                      width: 130,
-                      height: 180,
-                    ),
-                    title: '愤怒的葡萄',
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: UIParams.largerGap.h),
         ],
       ),
     );
@@ -486,28 +374,11 @@ class _BookDetailState extends State<BookDetail>{
       ],
     );
   }
-  Widget _buildAvailableWidget({required String item,required BuildContext context, bool isAvailable = true}){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 11.w,vertical: 10.h),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(UIParams.smallBorderR),
-          color: isAvailable ? Theme.of(context).colorScheme.primary:Theme.of(context).disabledColor,
-      ),
-      child: Row(
-        children: [
-          Icon(
-            isAvailable ? Icons.done : Icons.close,
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          SizedBox(width: 5.w),
-          Text(
-            item,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.surface
-            ),
-          ),
-        ],
-      ),
-    );
+
+  Future<void> putConfirmed() async{
+    bool res=await UserBookHandler.addBookToShelf(bookInfo: _bprov.confirmBookInfo);
+    if(res){
+      Navigator.of(context).pop();
+    }
   }
 }

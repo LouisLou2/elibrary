@@ -1,14 +1,19 @@
 import 'dart:ui';
 
+import 'package:barcode_scan2/gen/protos/protos.pb.dart';
+import 'package:barcode_scan2/model/scan_options.dart';
+import 'package:barcode_scan2/platform_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:elibrary/presentation/page/add_book_confirm_page.dart';
-import 'package:elibrary/state_management/prov/user_book_prov.dart';
+import 'package:elibrary/presentation/page/book_shelf/add_book_confirm_page.dart';
+import 'package:elibrary/state_management/prov/book_shelf_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/user_book_handler.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../constant/app_strings.dart';
@@ -24,13 +29,25 @@ class BookShelf extends StatefulWidget {
 
 class _BookShelfState extends State<BookShelf> {
 
+  bool _confirmModalVisible = false;
+  bool confirmModalVisible() => _confirmModalVisible;
+  void setConfirmModalVisible(bool visible) {
+    _confirmModalVisible = visible;
+  }
+
   final GlobalKey<TooltipState> tooltipkey=GlobalKey<TooltipState>();
-  final UserBookProv uprov= ProvManager.userBookProv;
+  final BookShelfProv _uprov= ProvManager.bookshelfProv;
 
   bool _isSelectionMode = false;
   List<bool> _isSelected = List.generate(20, (_) => false);
   String result = '';
 
+  @override
+  void initState() {
+    // 初始化书架页面
+    UserBookHandler.initBookShelfPage();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,28 +61,7 @@ class _BookShelfState extends State<BookShelf> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
                     child: IconButton(
-                      onPressed: () async {
-                        // var result = await BarcodeScanner.scan(
-                        // options: const ScanOptions(
-                        //   autoEnableFlash: false,
-                        //   strings: {
-                        //     'cancel': 'Cancel',
-                        //     'flash_on': 'Flash',
-                        //     'flash_off': 'Flash off',
-                        //   },
-                        // ),
-                        // );
-                        // print(result.type); // The result type (barcode, cancelled, failed)
-                        // print(result.rawContent); // The barcode content
-                        // print(result.format); // The barcode format (as enum)
-                        // print(result.formatNote); // If a unknown format was scanned this field contains a note,
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return const BookConfirmPage();
-                          },
-                        );
-                      },
+                      onPressed: addButtonPressed,
                       icon: Icon(
                         Icons.add,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -153,55 +149,62 @@ class _BookShelfState extends State<BookShelf> {
               Expanded(
                 child:Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 0),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 8.0,
-                      crossAxisSpacing: 8.0,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: 15,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CupertinoContextMenu(
-                        enableHapticFeedback: false,
-                        actions: [
-                          CupertinoContextMenuAction(
-                            trailingIcon: CupertinoIcons.share,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('分享'),
-                          ),
-                          CupertinoContextMenuAction(
-                            isDestructiveAction: true,
-                            trailingIcon: CupertinoIcons.delete,
-                            child: const Text('下架'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                        child: CustomImageCard(
-                          image: CachedNetworkImage(
-                            imageUrl: uprov.bookShelf[index].cover_url,
-                            fit: BoxFit.cover,
-                            width: 220.w,
-                            height: 277.w,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                          ),
-                          text: uprov.bookShelf[index].title,
-                          //useSolidColor: true,
-                          surfaceColor: Colors.white,
+                  child: Selector<BookShelfProv,int>(
+                    selector: (_,prov)=>prov.bookShelf.length,
+                    builder: (context,len,___){
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 8.0,
+                          crossAxisSpacing: 8.0,
+                          childAspectRatio: 0.7,
                         ),
+                        itemCount: len,
+                        itemBuilder: (BuildContext context, int index) {
+                          return CupertinoContextMenu(
+                            enableHapticFeedback: false,
+                            actions: [
+                              CupertinoContextMenuAction(
+                                trailingIcon: CupertinoIcons.share,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('分享'),
+                              ),
+                              CupertinoContextMenuAction(
+                                isDestructiveAction: true,
+                                trailingIcon: CupertinoIcons.delete,
+                                child: const Text('下架'),
+                                onPressed: () {
+                                  UserBookHandler.rmBookFromShelf(isbnList: [_uprov.bookShelf[index].isbn]);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                            child: CustomImageCard(
+                              key: ValueKey<String>(_uprov.bookShelf[index].isbn),// 用isbn作为key, 以提高刷新性能
+                              image: CachedNetworkImage(
+                                imageUrl: _uprov.bookShelf[index].cover_url,
+                                fit: BoxFit.cover,
+                                width: 220.w,
+                                height: 277.w,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              ),
+                              text: _uprov.bookShelf[index].title,
+                              //useSolidColor: true,
+                              surfaceColor: Colors.white,
+                            ),
+                          );
+                        },
                       );
                     },
-                  ),
+                  )
                 ),
               ),
             ],
@@ -251,5 +254,40 @@ class _BookShelfState extends State<BookShelf> {
         ],
       ),
     );
+  }
+  Future<void> addButtonPressed() async{
+    var result = await BarcodeScanner.scan(
+      options: const ScanOptions(
+        autoEnableFlash: false,
+        strings: {
+          'cancel': 'Cancel',
+          'flash_on': 'Flash',
+          'flash_off': 'Flash off',
+        },
+      ),
+    );
+    print(result.type); // The result type (barcode, cancelled, failed)
+    print(result.rawContent); // The barcode content
+    print(result.format); // The barcode format (as enum)
+    print(result.formatNote); // If a unknown format was scanned this field contains a note,
+    if(result.type==ResultType.Cancelled){
+      return;
+    }
+    bool res = await  UserBookHandler.initConfirmDialog(
+      isbn: '1401204252',
+    );
+    if(res){
+      showModalBottomSheet(
+        context: context,
+        builder: (context)=>const BookConfirmPage(),
+      );
+    }
+    else{
+      // 显示加载中并且重试
+      showModalBottomSheet(
+        context: context,
+        builder: (context)=>const CupertinoActivityIndicator(),
+      );
+    }
   }
 }

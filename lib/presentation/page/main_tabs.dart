@@ -1,7 +1,7 @@
 import 'package:elibrary/constant/app_strings.dart';
-import 'package:elibrary/presentation/page/browse_book_page.dart';
+import 'package:elibrary/presentation/page/browse/browse_book_page.dart';
 import 'package:elibrary/presentation/page/home/home_page.dart';
-import 'package:elibrary/presentation/page/profile_page.dart';
+import 'package:elibrary/presentation/page/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

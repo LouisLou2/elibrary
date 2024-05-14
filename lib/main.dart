@@ -16,10 +16,11 @@ import 'package:elibrary/usecase/requester/implement/auth_requester_imple.dart';
 import 'package:elibrary/usecase/requester/interface/auth_requester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
-
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'datasource/network/manage/network_config.dart';
 import 'domain/entity/user.dart';
 import 'domain/util_model/res_info.dart';
@@ -59,7 +60,8 @@ class _MyAppState extends State<MyApp>{
               themeMode: prov.mode,
               navigatorKey: NavigationHelper.key,
               onGenerateRoute: RouteGenerator.generateRoute,
-              home: const BookingPage(),
+              home: _getHome(),
+              builder: EasyLoading.init(),
             ),
           ),
         ),
@@ -79,6 +81,23 @@ void main() async{
   initAsync();
   runApp(const MyApp());
 }
+
+// void main() {
+//   // Dart client
+//   IO.Socket socket = IO.io(
+//     'ws://192.168.24.144:5000',
+//     IO.OptionBuilder()
+//         .setTransports(['websocket']) // disable auto-connection
+//         .build(),
+//   );
+//   socket.onConnect((_) {
+//     print('connect');
+//     socket.emit('msg', 'test');
+//   });
+//   socket.on('event', (data) => print(data));
+//   socket.onDisconnect((_) => print('disconnect'));
+//   socket.on('fromServer', (_) => print(_));
+// }
 
 // void main() async{
 //   await testAuth();

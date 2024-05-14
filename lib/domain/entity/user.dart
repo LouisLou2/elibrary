@@ -1,3 +1,4 @@
+import 'package:elibrary/domain/entity/simple_user.dart';
 import 'package:isar/isar.dart';
 part 'user.g.dart';
 
@@ -35,4 +36,14 @@ class User{
         location = map['location'],
         gender = map['gender'],
         token = '';
+
+  SimpleUser toSimpleUser() {
+    return SimpleUser(
+      userId: userId,
+      name: name,
+      role: role,
+      location: location??-1,
+    );
+  }
+  String get avatarStr => name.isEmpty ? 'U' : name[0].toUpperCase();
 }

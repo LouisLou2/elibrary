@@ -1,21 +1,22 @@
+import 'package:elibrary/constant/app_transaction_param.dart';
 import 'package:isar/isar.dart';
 part 'book_info.g.dart';
 
 // isar嵌套对象的字段必须都可空，这不是一个好的设计，所以暂时放弃这个嵌套
-class SimpleAuthorInfo{
-  int author_id;
-  String name;
-  SimpleAuthorInfo({
-    required this.author_id,
-    required this.name,
-  });
-  factory SimpleAuthorInfo.fromJson(Map<String, dynamic> map){
-    return SimpleAuthorInfo(
-      author_id: map['author_id'],
-      name: map['name'],
-    );
-  }
-}
+// class SimpleAuthorInfo{
+//   int author_id;
+//   String name;
+//   SimpleAuthorInfo({
+//     required this.author_id,
+//     required this.name,
+//   });
+//   factory SimpleAuthorInfo.fromJson(Map<String, dynamic> map){
+//     return SimpleAuthorInfo(
+//       author_id: map['author_id'],
+//       name: map['name'],
+//     );
+//   }
+// }
 
 @collection
 class BookInfo{
@@ -33,9 +34,9 @@ class BookInfo{
   int category1;
   int category2;
   List<String>? tags;
-  String? cover_l_url;
+  String cover_l_url;
   String? cover_m_url;
-  String? cover_s_url;
+  String cover_s_url;
   String? ebook_url;
   // 在这里不打算加book的Owner, 这些信息是更改较为频繁的，不适合做客户端缓存
 
@@ -52,9 +53,9 @@ class BookInfo{
     this.originalTitle,
     this.desc,
     this.tags,
-    this.cover_l_url,
+    required this.cover_l_url,
     this.cover_m_url,
-    this.cover_s_url,
+    required this.cover_s_url,
     this.ebook_url,
   });
 
@@ -78,5 +79,6 @@ class BookInfo{
       ebook_url: map['ebook_url'],
     );
   }
-
+  String get authorNamesStr=>authorNames.join(',');
+  String get cate1Str=>LibTranscationInfo.getCategory1Name(category1);
 }

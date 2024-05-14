@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class RemoveBookParam{
   final List<String> isbnList;
 
@@ -5,7 +7,7 @@ class RemoveBookParam{
 
   Map<String,dynamic> toJson(){
     return {
-      "isbn_list":isbnList,
+      "isbn_list": jsonEncode(isbnList),
     };
   }
 }

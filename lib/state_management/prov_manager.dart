@@ -1,6 +1,12 @@
+import 'package:elibrary/domain/req_model/user_book/reserve_param.dart';
+import 'package:elibrary/state_management/prov/chat_prov.dart';
 import 'package:elibrary/state_management/prov/content_prov.dart';
+import 'package:elibrary/state_management/prov/record_prov.dart';
+import 'package:elibrary/state_management/prov/reserve_prov.dart';
+import 'package:elibrary/state_management/prov/search_prov.dart';
 import 'package:elibrary/state_management/prov/theme_prov.dart';
-import 'package:elibrary/state_management/prov/user_book_prov.dart';
+import 'package:elibrary/state_management/prov/book_shelf_prov.dart';
+import 'package:elibrary/state_management/prov/user_lending_prov.dart';
 import 'package:elibrary/state_management/prov/user_prov.dart';
 import 'package:elibrary/state_management/prov/veri_code_prov.dart';
 import 'package:get_it/get_it.dart';
@@ -22,7 +28,15 @@ class ProvManager{
 
   static late VeriCodeProv veriCodeProv;
   static late AuthProv authProv;
-  static late UserBookProv userBookProv;
+
+  static late BookShelfProv bookshelfProv;
+  static late ReserveProv reserveProv;
+  static late RecordProv recordProv;
+
+  static late UserLendingProv userLendingProv;
+  static late ChatProv chatProv;
+
+  static late SearchProv searchProv;
 
   static List<SingleChildWidget> widgets(){
     return [
@@ -34,7 +48,15 @@ class ProvManager{
 
       ChangeNotifierProvider.value(value: veriCodeProv),
       ChangeNotifierProvider.value(value: authProv),
-      ChangeNotifierProvider.value(value: userBookProv),
+
+      ChangeNotifierProvider.value(value: bookshelfProv),
+      ChangeNotifierProvider.value(value: reserveProv),
+      ChangeNotifierProvider.value(value: recordProv),
+
+      ChangeNotifierProvider.value(value: userLendingProv),
+      ChangeNotifierProvider.value(value: chatProv),
+
+      ChangeNotifierProvider.value(value: searchProv),
     ];
   }
 
@@ -47,7 +69,15 @@ class ProvManager{
 
     veriCodeProv=VeriCodeProv();
     authProv=AuthProv();
-    userBookProv=UserBookProv();
+
+    bookshelfProv=BookShelfProv();
+    reserveProv=ReserveProv();
+    recordProv=RecordProv();
+
+    userLendingProv=UserLendingProv();
+    chatProv=ChatProv();
+
+    searchProv=SearchProv();
   }
 
   static initUserState(){

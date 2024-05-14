@@ -56,6 +56,11 @@ dependencies:
   dio: ^5.4.3+1
   get_it: ^7.6.8
   cached_network_image: ^3.3.1
+  web_socket_channel: ^2.4.5
+  socket_io_client: ^3.0.0-beta.2
+  syncfusion_flutter_pdfviewer: ^25.2.3
+  flutter_easyloading: ^3.0.5
+  nil: ^1.1.1
   # file_picker: ^8.0.3
   # image_picker: ^1.1.1
   # mime: ^1.0.5

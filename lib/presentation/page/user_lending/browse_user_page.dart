@@ -1,19 +1,17 @@
 import 'dart:ui';
 
-import 'package:elibrary/presentation/page/add_book_confirm_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elibrary/state_management/prov/user_lending_prov.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/user_chat_handler.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pull_down_button/pull_down_button.dart';
-
-import '../../constant/app_strings.dart';
-import '../specific_style_widget/text_widget.dart';
-import '../widget/custom_image_card.dart';
-import '../widget/image_tile.dart';
-import '../widget/info_display/headline2.dart';
-import '../widget/setting_section.dart';
+import 'package:provider/provider.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../specific_style_widget/text_widget.dart';
+import '../../widget/custom_image_card.dart';
 
 class BrowseUserPage extends StatefulWidget {
   const BrowseUserPage({super.key});
@@ -24,6 +22,7 @@ class BrowseUserPage extends StatefulWidget {
 
 class _BrowseUserPageState extends State<BrowseUserPage> {
 
+  final UserLendingProv _ulprov = ProvManager.userLendingProv;
   final GlobalKey<TooltipState> tooltipkey=GlobalKey<TooltipState>();
 
   @override
@@ -79,23 +78,31 @@ class _BrowseUserPageState extends State<BrowseUserPage> {
                     width: UIParams.defAvatarBorderW, // 边框宽度
                   ),
                 ),
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage(
-                    'assets/images/avatar1.png',
+                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  child: Text(
+                    _ulprov.nowUser.avatarStr,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      fontSize: 45,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
             ),
             Text (
-              '谷森森',
+              _ulprov.nowUser.name,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
               ),
             ),
             Text (
-              '同学',
+              _ulprov.nowUser.roleStr,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -110,7 +117,8 @@ class _BrowseUserPageState extends State<BrowseUserPage> {
                 width: 1.5,
               ),
               label: Text(
-                '铁道校区',
+                _ulprov.nowUser.locationStr,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -123,7 +131,7 @@ class _BrowseUserPageState extends State<BrowseUserPage> {
                   CupertinoColors.systemBlue,
                 ),
               ),
-              onPressed: () {},
+              onPressed: chatWithHim,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 98.w,vertical: 10.h),
                 child: Wrap(
@@ -155,50 +163,44 @@ class _BrowseUserPageState extends State<BrowseUserPage> {
               )
             ),
             Expanded(
-              child:Padding(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
-                    childAspectRatio: 0.7,
-                  ),
-                  itemCount: 15,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CupertinoContextMenu(
-                      enableHapticFeedback: false,
-                      actions: [
-                        CupertinoContextMenuAction(
-                          trailingIcon: CupertinoIcons.share,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('分享'),
-                        ),
-                        CupertinoContextMenuAction(
-                          isDestructiveAction: true,
-                          trailingIcon: CupertinoIcons.delete,
-                          child: const Text('下架'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                      child: CustomImageCard(
-                          image: Image.network(
-                            'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
+                child: Selector<UserLendingProv, int>(
+                  selector: (_, prov) => prov.nowUserShelf.length,
+                  builder: (_, len, __) {
+                    if(len == 0) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 0.7,
+                      ),
+                      itemCount: len,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomImageCard(
+                          image: CachedNetworkImage(
+                            imageUrl: _ulprov.nowUserShelf[index].cover_url,
                             fit: BoxFit.cover,
                             width: 200,
                             height: 300,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
-                          text: 'Dart Apprentice',
+                          text: _ulprov.nowUserShelf[index].title,
                           //useSolidColor: true,
-                          surfaceColor: Colors.white
-                      ),
+                          surfaceColor: Colors.white,
+                        );
+                      }
                     );
                   },
                 ),
@@ -207,6 +209,11 @@ class _BrowseUserPageState extends State<BrowseUserPage> {
           ],
         ),
       ),
+    );
+  }
+  void chatWithHim(){
+    UserChatHandler.enterChatPage(
+      receiver: _ulprov.nowUser,
     );
   }
 }

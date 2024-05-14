@@ -38,7 +38,9 @@ class AppStrs{
   static const appearance='外观';
 
   static const readOnline='在线阅读';
+  static const cantReadOnline='暂无在线阅读';
   static const toBorrow='借阅';
+  static const noResouce='暂无资源';
   static const reservationDetail='预约详情';
   static const borrowDetail='借阅详情';
 

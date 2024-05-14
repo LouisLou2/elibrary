@@ -13,4 +13,14 @@ class Author{
     required this.name,
     this.desc,
   });
+
+  factory Author.fromJson(Map<String, dynamic> json){
+    return Author(
+      authorId: json['authorId'],
+      name: json['name'],
+      desc: json['desc'],
+    );
+  }
+
+  String get avatarStr => name.isNotEmpty?name[0].toUpperCase():'A';
 }

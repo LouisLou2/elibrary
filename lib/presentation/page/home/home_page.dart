@@ -1,6 +1,5 @@
 import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elibrary/constant/app_transaction_param.dart';
 import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/widget/Image_card_with_info.dart';
 import 'package:elibrary/presentation/widget/box_groov.dart';
@@ -69,7 +68,7 @@ class _HomePageState extends State<HomePage>{
               Padding(
                 padding: const EdgeInsets.only(left:14),
                 child: Selector<ContentProv,int>(
-                  selector: (_,prov)=> min(prov.recommendBooks.length,ContentHandler.home_reco_num),
+                  selector: (_,prov)=> min(prov.recommendBooks.length,AppTransactionParam.recommendBookHomeNum),
                   builder: (_,number,__)=>BoxGroove(
                     title: Text(
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22,fontWeight: FontWeight.w500),
@@ -78,6 +77,7 @@ class _HomePageState extends State<HomePage>{
                     titleOnTap: ()=>Navigator.of(context).pushNamed('/section_list'),
                     widgets: List.generate(number,
                       (index) => CustomImageCard(
+                        onTap: ()=> ContentHandler.browseDetail(cprov.recommendBooks[index].bookInfo),
                         image: getCustomCachedImage(
                           url: cprov.recommendBooks[index].bookInfo.cover_l_url??'',
                           width: AppRepreConst.hugeBookW.w,

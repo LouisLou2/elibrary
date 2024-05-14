@@ -1,6 +1,9 @@
 import 'package:elibrary/datasource/db/interface/bookinfo_db_da.dart';
 import 'package:elibrary/datasource/network/interface/bookinfo_net_ds.dart';
+import 'package:elibrary/domain/entity/book.dart';
 import 'package:elibrary/domain/entity/book_info.dart';
+import 'package:elibrary/domain/resp_model/book_info/search_resp.dart';
+import 'package:elibrary/domain/resp_model/user_lending/record_list_resp.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../constant/rescode.dart';
@@ -45,5 +48,16 @@ class BookInfoRepImple implements BookInfoRep {
       }
     }
     return bookInfoRes;
+  }
+
+  @override
+  Future<Result<List<Owner>>> getBookOwners(String isbn) {
+    // 只从网络获取
+    return bookInfoNetDs.getBookOwners(isbn);
+  }
+
+  @override
+  Future<Result<SearchResp>> search({required String keyword}) {
+    return bookInfoNetDs.search(keyword);
   }
 }

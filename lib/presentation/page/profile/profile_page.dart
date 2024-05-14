@@ -1,12 +1,16 @@
 import 'package:elibrary/presentation/widget/image_tile.dart';
 import 'package:elibrary/presentation/widget/setting_section.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/user_book_handler.dart';
+import 'package:elibrary/usecase/handler/user_chat_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../constant/app_strings.dart';
-import '../../style/app_colors.dart';
-import '../widget/info_display/headline2.dart';
+import '../../../constant/app_strings.dart';
+import '../../../state_management/prov/user_prov.dart';
+import '../../../state_management/prov_manager.dart';
+import '../../../style/app_colors.dart';
+import '../../widget/info_display/headline2.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,6 +19,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  final UserProv _uprov = ProvManager.userProv;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           image: CircleAvatar(
                             radius: 28.w,
                             child: Text(
-                              'L',
+                              _uprov.user?.avatarStr??'U',
                               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontSize: 25.w,
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -66,8 +72,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           circleImage: true,
-                          title: 'Leo Chen',
-                          subTitle: '8209210345@csu.edu.cn',
+                          title: _uprov.user?.name,
+                          subTitle: _uprov.user?.email,
                           fontSize: 22,
                           actionWidget: Chip(
                             label: Text(
@@ -102,7 +108,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             _buildNumSection(AppStrs.star, 12, () { }),
                             _buildNumSection(AppStrs.history, 56, () { }),
-                            _buildNumSection(AppStrs.query, 23, () { }),
+                            _buildNumSection(
+                              AppStrs.query, 23,
+                              UserChatHandler.enterChatSessionPage,
+                            ),
                           ],
                         )
                       ],
@@ -121,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SettingSection(
                       children: [
-                        _buildSettingTitle(icon: Icons.timer, iconColor: Colors.blueAccent,title: AppStrs.myReservations, onTap: ()=>Navigator.of(context).pushNamed('/record'),),
+                        _buildSettingTitle(icon: Icons.timer, iconColor: Colors.blueAccent,title: AppStrs.myReservations, onTap: ()=>UserBookHandler.enterRecordListPage(),),
                         const Divider( height: 1, thickness: 1, indent: 14,),
                         _buildSettingTitle(icon: Icons.book, iconColor: Colors.amber,title: AppStrs.myBorrowed, onTap: ()=>Navigator.of(context).pushNamed('/record'),),
                         const Divider( height: 1, thickness: 1, indent: 14,),

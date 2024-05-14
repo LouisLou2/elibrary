@@ -1,4 +1,5 @@
 import 'package:elibrary/domain/util_model/res_info.dart';
+import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/helper/toast_helper.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:get_it/get_it.dart';
@@ -21,6 +22,7 @@ class AuthHandler{
     userProv.setUser(user);
     stateRep.saveUser(user);
     stateRep.setDefaultUser(user);
+    wsInit();// 前置依赖: User设置好，这里是userProv.setUser(user);
   }
 
   static Future<void> logInWithPwd({required String email, required String password}) async{

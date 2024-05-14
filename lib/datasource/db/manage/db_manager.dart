@@ -7,6 +7,7 @@ import '../../../../domain/entity/book_cache_info.dart';
 import '../../../../domain/entity/book_shelf.dart';
 import '../../../../domain/entity/mark.dart';
 import '../../../../domain/entity/user.dart';
+import '../../../domain/entity/message.dart';
 
 /*静态*/
 class DBManager{
@@ -24,6 +25,8 @@ class DBManager{
         BookInfoSchema,
         AuthorSchema,
         BookCacheInfoSchema,
+
+        AppMessageSchema,
       ],
       directory: PathManager.dbDir.path,
       inspector: true,

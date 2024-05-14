@@ -6,11 +6,10 @@ import 'package:elibrary/style/ui_params.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../constant/app_strings.dart';
-import '../widget/custom_image_card.dart';
-import '../widget/image_tile.dart';
-import '../widget/info_display/headline2.dart';
-import '../../extension/core_extension.dart';
+import '../../../constant/app_strings.dart';
+import '../../widget/image_tile.dart';
+import '../../widget/info_display/headline2.dart';
+import '../../../extension/core_extension.dart';
 
 class BrowseBookPage extends StatefulWidget {
   const BrowseBookPage({super.key});
@@ -154,9 +153,9 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 0),
                 child:Column(
-                  children: ListExtension.separate(
-                    6,
-                    (index)=>GestureDetector(
+                  children: ListExtension.separate<Widget>(
+                    len: 6,
+                    generator: (index)=>GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: ()=>Navigator.of(context).pushNamed('/book_detail'),
                       child: ImageTile(
@@ -174,7 +173,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                         fontSize: 20,
                       ),
                     ),
-                    (index)=>LayoutBuilder(
+                    separatorGenerator: (index)=>LayoutBuilder(
                       builder: (BuildContext context,BoxConstraints constraints){
                         return Divider(
                           height: UIParams.smallGap.h,

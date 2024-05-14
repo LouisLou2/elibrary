@@ -5,22 +5,24 @@ import '../../domain/entity/book_info.dart';
 
 class ContentProv with ChangeNotifier {
 
-  //static int home_reco_offset=0;// 首页推荐滑槽的偏移量, 不断更新, 目前使用lenth即可
-
-  List<Book> recommendBooks = [];
-  List<Book> historyBooks = [];
-  List<Book> trendBooks = [];
-
-  //setter
-  void setRecoBooksWithBookInfo(List<BookInfo> books, {bool notify=false}){
-    recommendBooks = books.map((e) => Book(bookInfo: e)).toList();
-    //home_reco_offset=recommendBooks.length;
-    if(notify) notifyListeners();
-  }
-  //add
-  void addRecommendBooks(List<BookInfo> books,{bool notify=false}) {
-    recommendBooks.addAll(books.map((e) => Book(bookInfo: e)).toList());
-    //home_reco_offset+=recommendBooks.length;
+  /*------For Book Detal Page--------*/
+  late Book currentDetailBook;// 正处于在book_detail页面的书籍
+  void setNowBook(Book book){
+    currentDetailBook = book;
     notifyListeners();
   }
+
+  /*------For Recomendation---------*/
+  List<Book> recommendBooks = [];
+  void setRecoBooksWithBookInfo(List<BookInfo> books, {bool notify=false}){
+    recommendBooks = books.map((e) => Book(bookInfo: e)).toList();
+    if(notify) notifyListeners();
+  }
+  void addRecommendBooks(List<BookInfo> books,{bool notify=false}) {
+    recommendBooks.addAll(books.map((e) => Book(bookInfo: e)).toList());
+    notifyListeners();
+  }
+  /*---------Other------------------*/
+  List<Book> historyBooks = [];
+  List<Book> trendBooks = [];
 }
