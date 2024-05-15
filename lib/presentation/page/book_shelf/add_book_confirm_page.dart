@@ -3,6 +3,7 @@ import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart'
 import 'package:elibrary/presentation/widget/box_groov.dart';
 import 'package:elibrary/state_management/prov/book_shelf_prov.dart';
 import 'package:elibrary/usecase/handler/user_book_handler.dart';
+import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary.withOpacity(0.12)),
                   ),
-                  onPressed: null,
+                  onPressed: ()=>NavigationHelper.pop(),
                   child: Text(
                     AppStrs.cancel,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -378,7 +379,7 @@ class _BookConfirmPageState extends State<BookConfirmPage>{
   Future<void> putConfirmed() async{
     bool res=await UserBookHandler.addBookToShelf(bookInfo: _bprov.confirmBookInfo);
     if(res){
-      Navigator.of(context).pop();
+      NavigationHelper.pop();
     }
   }
 }

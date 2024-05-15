@@ -1,6 +1,19 @@
 class AppStrs{
 
+  static const loadError='加载失败';
   static const cancel='取消';
+  static const confirm='确认';
+  static const save='保存';
+  static const delete='删除';
+  static const edit='编辑';
+  static const add='添加';
+  static const submit='提交';
+  static const back='返回';
+  static const next='下一步';
+  static const done='完成';
+  static const skip='跳过';
+  static const resend='重新发送';
+  static const retry='重试';
 
   static const home='主页';
   static const search='找书';

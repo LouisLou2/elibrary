@@ -61,8 +61,11 @@ class BookInfoRepImple implements BookInfoRep {
     return bookInfoNetDs.search(keyword);
   }
   @override
-  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num}) {
+  Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num, bool onlyNet=false}) {
     // 先用delayed模拟网络请求
+    if(onlyNet){
+      return Future.delayed(const Duration(milliseconds: 500), ()=>Result.abnormal(ResCode.CANNOT_CONNECT));
+    }
     List<BookInfo> bookInfos = List.generate(10, (index) =>
         BookInfo(
           isbn: '1234567890123',
@@ -83,6 +86,6 @@ class BookInfoRepImple implements BookInfoRep {
           ebook_url: 'http://example.com/ebook.pdf',
         ),
       );
-    return Future.delayed(const Duration(milliseconds: 500), ()=>Result.success(bookInfos));
+    return Future.delayed(const Duration(milliseconds: 500), ()=>Result(ResCode.DATA_NOT_NEW,data: bookInfos));
   }
 }

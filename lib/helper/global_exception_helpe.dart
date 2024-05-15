@@ -16,6 +16,9 @@ class GlobalExceptionHelper{
       else if(isTimeOutException(e)){
         return Result(ResCode.REQUEST_TIME_OUT);
       }
+      else if(dioE.type == DioExceptionType.connectionError){
+        return Result(ResCode.CANNOT_CONNECT);
+      }
       return Result(ResCode.REQUEST_ERROR);
     }
     // database part

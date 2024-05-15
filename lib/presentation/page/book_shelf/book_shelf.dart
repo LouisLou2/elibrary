@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:barcode_scan2/gen/protos/protos.pb.dart';
 import 'package:barcode_scan2/model/scan_options.dart';
 import 'package:barcode_scan2/platform_wrapper.dart';
@@ -12,6 +10,7 @@ import 'package:elibrary/usecase/handler/user_book_handler.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -273,20 +272,53 @@ class _BookShelfState extends State<BookShelf> {
     if(result.type==ResultType.Cancelled){
       return;
     }
+    EasyLoading.show();
     bool res = await  UserBookHandler.initConfirmDialog(
       isbn: '1401204252',
     );
+    EasyLoading.dismiss();
     if(res){
       showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
-        builder: (context)=>const BookConfirmPage(),
+        builder: (context)=>SizedBox(
+          height: MediaQuery.of(context).size.height * 0.85,
+          child: const BookConfirmPage(),
+        ),
       );
     }
     else{
       // 显示加载中并且重试
       showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
-        builder: (context)=>const CupertinoActivityIndicator(),
+        builder: (context)=>SizedBox(
+          height: MediaQuery.of(context).size.height * 0.3,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.clear_circled,
+                size: Theme.of(context).textTheme.titleLarge?.fontSize,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:10),
+                child: Text(
+                  '暂无此书记录',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              CupertinoButton(
+                onPressed: (){},
+                child: const Text(
+                  '去反馈'
+                ),
+              )
+            ],
+          ),
+        ),
       );
     }
   }

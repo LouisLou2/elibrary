@@ -27,6 +27,7 @@ import 'package:elibrary/usecase/requester/interface/chat_messenger.dart';
 import 'package:elibrary/usecase/requester/interface/userbook_requester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
 
 import 'datasource/db/implement/bookinfo_db_ds_imple.dart';
@@ -69,6 +70,7 @@ void generalUIInit(Brightness b){
     systemNavigationBarDividerColor: Colors.transparent,
   );
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  EasyLoading.instance.indicatorType=EasyLoadingIndicatorType.fadingCircle;
 }
 // lazy and not lazy
 Future<void> initInjection() async {

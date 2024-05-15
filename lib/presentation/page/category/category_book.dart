@@ -2,15 +2,16 @@ import 'package:elibrary/constant/book_const.dart';
 import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/presentation/widget/image_tile.dart';
 import 'package:elibrary/state_management/prov/category_prov.dart';
-import 'package:elibrary/style/ui_params.dart';
 import 'package:elibrary/usecase/handler/content_handler.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
+import '../../../constant/app_strings.dart';
+import '../../../constant/data_enum.dart';
 import '../../../state_management/prov_manager.dart';
-import '../../widget/costome_image_tile.dart';
 
 class CategoryBook extends StatefulWidget{
   const CategoryBook({super.key});
@@ -21,7 +22,7 @@ class CategoryBook extends StatefulWidget{
 class _CategoryBookState extends State<CategoryBook>{
 
   late ScrollController _scrollController;
-  late CategoryProv _cprov;
+  final CategoryProv _cprov = ProvManager.categoryProv;
   late CateChild cateChild;
   late int begin;
   late int end;
@@ -29,16 +30,22 @@ class _CategoryBookState extends State<CategoryBook>{
   @override
   void initState(){
     _scrollController = ScrollController();
-    _cprov = ProvManager.categoryProv;
     cateChild = BookConst.cateChildList[_cprov.nowCategory1];
     begin = cateChild.begin;
     end = cateChild.end;
+    // 滚动监听
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        ContentHandler.autoLoadMoreCate12Books();
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose(){
     _scrollController.dispose();
+    _cprov.disposeForCateBook();
     super.dispose();
   }
 
@@ -109,55 +116,107 @@ class _CategoryBookState extends State<CategoryBook>{
               thickness: 0.8,
             ),
           ),
-          Expanded(
-            child: Selector<CategoryProv, int>(
-              selector: (_, prov) => prov.cate12Books.length,
-              builder: (context, len, _) => ListView.builder(
-                controller: _scrollController,
-                itemCount: len,
-                itemBuilder: (BuildContext context, int index) {
-                  return ImageTile(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-                    title: _cprov.cate12Books[index].title,
-                    subTitle: _cprov.cate12Books[index].authorNamesStr,
-                    thirdTitle: _cprov.cate12Books[index].publisher,
-                    image: getCustomCachedImage(
-                      url: _cprov.cate12Books[index].cover_l_url,
-                      width: 80,
-                      height: 110,
-                    ),
-                    actionWidget: Chip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+          Selector<CategoryProv,Tuple2<int,DataEnum>>(
+            selector: (_, prov) => prov.nowLenAndStatus,
+            builder: (context,lenAndStatus,_) {
+              if(lenAndStatus.item1==0 && lenAndStatus.item2 != DataEnum.LOADING){
+                return Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        AppStrs.loadError,
                       ),
-                      side: BorderSide.none,
-                      avatar: Icon(
-                        CupertinoIcons.star_fill,
-                        size: 15,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      elevation: 10,
-                      label: Text(
-                        '7668',
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 10,
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Theme.of(context).hoverColor,
+                          foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        onPressed: () => ContentHandler.reqToReloadPage(),
+                        child: Text(
+                          AppStrs.retry,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 5),
-                      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                    ),
-                    titleWeight: FontWeight.w500,
-                    onTap: () {},
-                    fontSize: 18,
-                    fontSize3: 13,
-                  );
-                },
-              ),
-            ),
-          ),
+                    ],
+                  ),
+                );
+              }
+              return Expanded(
+                child: Selector<CategoryProv, Tuple2<int,DataEnum>>(
+                  selector: (_, prov) => prov.nowLenAndStatus,
+                  builder: (context, lenAndStatus, _) => ListView.builder(
+                    controller: _scrollController,
+                    itemCount: lenAndStatus.item1 + 1,//加一个用于显示loading或者没有更多或者重试
+                    itemBuilder: (BuildContext context, int index) {
+                      if(index==lenAndStatus.item1){
+                        if(_cprov.dataEnum==DataEnum.LOADING) return const Center(child: CircularProgressIndicator());
+                        if(_cprov.dataEnum==DataEnum.NO_MORE) return const Center(child: Text('没有更多了'));
+                        if(_cprov.dataEnum==DataEnum.ERROR) {
+                          return Center(
+                            child:CupertinoButton(
+                              onPressed:() => ContentHandler.loadMoreCate12Books(),
+                              child: const Text(AppStrs.retry),
+                            ),
+                          );
+                        }
+                        if(_cprov.dataEnum==DataEnum.OLD){
+                          return Center(
+                            child:CupertinoButton(
+                              onPressed:() => ContentHandler.reqToReloadPage(),
+                              child: const Text(AppStrs.retry),
+                            ),
+                          );
+                        }
+                        return nil;
+                      }
+                      return ImageTile(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+                        title: _cprov.cate12Books[index].title,
+                        subTitle: _cprov.cate12Books[index].authorNamesStr,
+                        thirdTitle: _cprov.cate12Books[index].publisher,
+                        image: getCustomCachedImage(
+                          url: _cprov.cate12Books[index].cover_l_url,
+                          width: 80,
+                          height: 110,
+                        ),
+                        actionWidget: Chip(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          side: BorderSide.none,
+                          avatar: Icon(
+                            CupertinoIcons.star_fill,
+                            size: 15,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          elevation: 10,
+                          label: Text(
+                            '7668',
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 10,
+                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                            ),
+                          ),
+                          labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+                          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                        ),
+                        titleWeight: FontWeight.w500,
+                        onTap: () {},
+                        fontSize: 18,
+                        fontSize3: 13,
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          )
         ],
       ),
     );

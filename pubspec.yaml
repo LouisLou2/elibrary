@@ -61,6 +61,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^25.2.3
   flutter_easyloading: ^3.0.5
   nil: ^1.1.1
+  tuple: ^2.0.2
   # file_picker: ^8.0.3
   # image_picker: ^1.1.1
   # mime: ^1.0.5

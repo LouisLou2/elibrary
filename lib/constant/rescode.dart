@@ -14,6 +14,7 @@ class ResCode{
   static const int USER_CANCELED=1001; //用户取消了请求
   static const int REQUEST_TIME_OUT=1002; //请求超时
   static const int REQUEST_ERROR=1002; //请求错误
+  static const int CANNOT_CONNECT=1003; //无法连接到服务器
   // 861-880用于文件与数据库操作
   static const int DB_DATA_NOT_EXIST=861; //数据库中未找到该数据,
   static const int FILE_NOT_EXIST=862; //文件不存在
@@ -21,6 +22,9 @@ class ResCode{
   static const int DB_NOT_EXIST=864; //数据库不存在
   static const int DB_ERROR=865; //数据库读取或写入错误
   static const int DATA_DAMAGE=866; //数据损坏
+  // 881-900用于数据情况
+  static const int DATA_NOT_NEW=881; //数据期待从网络获取，但是获取错误，得到了从数据库预留的数据，即使有数据，这不是期待的数据
+
 
   // 服务端返回的各种状态码
   //1-20为服务端与业务无关的代码
@@ -43,7 +47,6 @@ class ResCode{
     title: '未知错误',
     desc: '未知错误',
   );
-
 
   static Map<int,AppNotification> resCodeMap={
     // SUCCESS
@@ -76,6 +79,11 @@ class ResCode{
       situaCode: SituationEnum.ERROR,
       title: '请求错误',
       desc: '请求错误',
+    ),
+    CANNOT_CONNECT:AppNotification(
+      situaCode: SituationEnum.ERROR,
+      title: '无法连接',
+      desc: '无法连接到服务器',
     ),
     FILE_NOT_EXIST:AppNotification(
       situaCode: SituationEnum.ERROR,

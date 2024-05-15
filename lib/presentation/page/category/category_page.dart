@@ -19,6 +19,7 @@ class CategoryPage extends StatelessWidget {
           },
         ),
         title: const Text('分类'),
+        centerTitle: true,
         surfaceTintColor: Colors.transparent,
       ),
       body: Padding(
@@ -36,7 +37,7 @@ class CategoryPage extends StatelessWidget {
               title: BookConst.category1List[index],
               subTitle: '1978本书',
               onTap: () {
-                ContentHandler.enterCategoryDetail(index);// 这个index就是代号
+                ContentHandler.enterCategoryDetail(cate1: index);
               },
               image: Image.asset(
                 BookConst.category1CoverAssets[index],

@@ -6,6 +6,7 @@ import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:elibrary/state_management/prov/category_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/content_handler.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:flutter/material.dart';
@@ -138,13 +139,15 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                   widgets: List.generate( _cprov.mostPopular1.length,
                       (index) => GradientImageCard(
                       image: Image.asset(
-                        _cprov.cate1Cover(index),
+                        _cprov.cate1Cover(_cprov.mostPopular1[index]),
                         fit: BoxFit.cover,
                         width: 200,
                         height: 300,
                       ),
                       text: _cprov.cate1Name(index),
-                      onTap: (){},
+                      onTap: (){
+                        ContentHandler.enterCategoryDetail(cate1: _cprov.mostPopular1[index]);
+                      },
                     ),
                   ),
                 ),

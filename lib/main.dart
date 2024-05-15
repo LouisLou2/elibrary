@@ -5,25 +5,18 @@ import 'package:elibrary/config/test_device.dart';
 import 'package:elibrary/init_affairs.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/onboarding_page.dart';
-import 'package:elibrary/presentation/page/reservation/booking_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/prov/theme_prov.dart';
 import 'package:elibrary/style/theme_collection.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:elibrary/usecase/nav/route_generator.dart';
-import 'package:elibrary/usecase/requester/implement/auth_requester_imple.dart';
-import 'package:elibrary/usecase/requester/interface/auth_requester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'datasource/network/manage/network_config.dart';
-import 'domain/entity/user.dart';
-import 'domain/util_model/res_info.dart';
 
 /// Flutter code sample for [TabBar].
 class MyApp extends StatefulWidget {
