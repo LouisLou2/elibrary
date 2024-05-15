@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../../presentation/page/auth/auth_pages.dart';
 import '../../presentation/page/auth/set_pwd_page.dart';
 import '../../presentation/page/category/category_page.dart';
+import '../../presentation/page/content/author_page.dart';
 import '../../presentation/page/content/book_detail.dart';
 import '../../presentation/page/onboarding_page.dart';
 import '../../presentation/page/record/record_page.dart';
@@ -27,6 +28,7 @@ class RouteCollector {
   static const String set_pwd = '/account/set_pwd';
 
   static const String book_detail = '/book_detail';
+  static const String author_detail = '/author_detail';
   static const String reserve = '/reserve';
   static const String reservation_detail = '/reservation_detail';
   static const String other_record_detail = '/other_record_detail';
@@ -53,6 +55,8 @@ class RouteCollector {
     set_pwd,
 
     book_detail,
+    author_detail,
+
     reserve,
     reservation_detail,
 
@@ -83,6 +87,8 @@ class RouteCollector {
     set_pwd: (context) => const SetPwdPage(),
 
     book_detail: (context) => const BookDetail(),
+    author_detail: (context) => const AuthorPage(),
+
     reserve: (context) => const BookingPage(),
     reservation_detail: (context) => const ReservationDetail(),
     other_record_detail: (context) => const NonReservationDetail(),

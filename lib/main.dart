@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:elibrary/config/test_device.dart';
 import 'package:elibrary/init_affairs.dart';
+import 'package:elibrary/presentation/page/content/author_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
 import 'package:elibrary/presentation/page/onboarding_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
@@ -62,6 +63,7 @@ class _MyAppState extends State<MyApp>{
     );
   }
   Widget _getHome(){
+    return const AuthorPage();
     if(ProvManager.userProv.isLogin){
       return const MainTabsPage();
     }else{
