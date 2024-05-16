@@ -27,7 +27,7 @@ class NetworkPathCollector {
   * /book/search
   * get 用于搜索书籍,返回的是一个搜索到的信息
   */
-  static const String search = "$book/search";
+  static const String search = "/search_book";//在后面路径加上关键字
   /*
   * /book/category
   * get: 用于获取某个分类下的书籍
@@ -61,4 +61,10 @@ class NetworkPathCollector {
   * get: 由用户id获取用户信息
   */
   static const String userInfo = '/chat_users';
+
+  /*
+   * /author_info
+   * get: 用于获取作者信息
+   */
+  static const String author_info = '/author_info';
 }

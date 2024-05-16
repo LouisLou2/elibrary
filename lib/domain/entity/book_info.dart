@@ -72,6 +72,7 @@ class BookInfo{
   });
 
   factory BookInfo.fromJson(Map<String, dynamic> map){
+    print('ok');
     return BookInfo(
       isbn: map['isbn'],
       title: map['title'],

@@ -62,13 +62,14 @@ class CustomImageCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: surfaceColor,
+                          fontWeight: FontWeight.w500,
                           fontSize: fontSize,
                           overflow: TextOverflow.ellipsis,
-                          shadows: const [
+                          shadows: [
                             Shadow(
-                              offset: Offset(1.0, 1.0),
-                              blurRadius: 30.0,
-                              color: Color.fromARGB(120, 0, 0, 0),
+                              offset: const Offset(1.0, 1.0),
+                              blurRadius: 2.0,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ],
                         ),

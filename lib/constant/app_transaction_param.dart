@@ -14,13 +14,13 @@ class AppTransactionParam {
 
   // 借阅状态的文字描述
   static const Map<int,String> lendingStatusMap = {
-    1: '已预约未取书',
+    1: '已预约',
 
-    2: '已借阅未归还',
+    2: '阅读中',
     3: '已归还',
-    4: '逾期未归还',
-    5: '已取消预约',
-    6: '已超时未取书',
+    4: '已逾期',
+    5: '取消预约',
+    6: '预约超时',
   };
   static bool goodStatus(int status){
     return status==2||status==3||status==4;
@@ -35,7 +35,7 @@ class AppTransactionParam {
 
   //record list
   static const int recordListPageSize = 10;
-  static const int recordListDefSize = 30;
+  static const int recordListDefSize = 50;
 
   // throttle time
   static const int throttleTime = 500;
@@ -43,6 +43,17 @@ class AppTransactionParam {
   // category
   static const int cateBookDefSize = 10;
   static const int cateBookPageSize = 10;
+
+  // author info
+  static const int authorBookDefSize = 5;
+  static const int authorBookPageSize = 10;
+
+  // search const
+  static const keywordMaxNum = 10;
+
+  // browsed recent
+  static const int browsedRecentDefSize = 8;
+  static const int browsedRecentPageSize = 8;
 }
 
 class LibInfo{

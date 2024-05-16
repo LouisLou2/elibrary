@@ -1,10 +1,9 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:elibrary/config/test_device.dart';
 import 'package:elibrary/init_affairs.dart';
-import 'package:elibrary/presentation/page/content/author_page.dart';
 import 'package:elibrary/presentation/page/main_tabs.dart';
+import 'package:elibrary/presentation/page/notification_page.dart';
 import 'package:elibrary/presentation/page/onboarding_page.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/state_management/prov/theme_prov.dart';
@@ -56,6 +55,7 @@ class _MyAppState extends State<MyApp>{
               onGenerateRoute: RouteGenerator.generateRoute,
               home: _getHome(),
               builder: EasyLoading.init(),
+              navigatorObservers: [NavigationHelper.observer],
             ),
           ),
         ),
@@ -63,7 +63,8 @@ class _MyAppState extends State<MyApp>{
     );
   }
   Widget _getHome(){
-    return const AuthorPage();
+    //return const NotificationPage();
+    //return const AuthorPage();
     if(ProvManager.userProv.isLogin){
       return const MainTabsPage();
     }else{

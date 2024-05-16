@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../entity/author.dart';
 import '../../entity/book_info.dart';
 
@@ -17,19 +19,16 @@ class SearchResp{
     List<String> publishers = [];
     List<BookInfo> books = [];
     if(json['authors'] != null){
-      json['authors'].forEach((v) {
-        authors.add(Author.fromJson(v));
-      });
+      List<dynamic> list = json['authors'];
+      authors = List<Author>.from(list.map((e) => Author.fromJson(e)));
     }
     if(json['publishers'] != null){
-      json['publishers'].forEach((v) {
-        publishers.add(v);
-      });
+      List<dynamic> list = json['publishers'];
+      publishers = List<String>.from(list);
     }
-    if(json['books'] != null){
-      json['books'].forEach((v) {
-        books.add(BookInfo.fromJson(v));
-      });
+    if(json['books_info'] != null){
+      List<dynamic> list = jsonDecode(json['books_info']);
+      books = List<BookInfo>.from(list.map((e) => BookInfo.fromJson(e)));
     }
     return SearchResp(
       authors: authors,

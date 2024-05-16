@@ -13,6 +13,7 @@ import '../../constant/data_enum.dart';
 import '../../constant/rescode.dart';
 import '../../domain/entity/book.dart';
 import '../../domain/entity/book_info.dart';
+import '../../respository/interface/history_record_repo.dart';
 import '../../state_management/prov/category_prov.dart';
 import '../../state_management/prov_manager.dart';
 
@@ -21,14 +22,31 @@ class ContentHandler{
   static ContentProv contentProv = ProvManager.contentProv;
   static CategoryProv categoryProv = ProvManager.categoryProv;
   static BookInfoRep bookInfoRep= GetIt.I<BookInfoRep>();
+  static HistoryRecordRep historyRecordRep= GetIt.I<HistoryRecordRep>();
 
   /*------------------首页内容加载------------------------------*/
   // 初始化首页内容
   static Future<void> initHomePageContent() async {
+    // 最近浏览书籍
+    final recentRes = await historyRecordRep.getRecentBrowsedBooks(
+      offset: 0,
+      num: AppTransactionParam.browsedRecentDefSize,
+    );
+    if(recentRes.resCode==ResCode.SUCCESS){
+      contentProv.setRecentBrowsedBooks(
+        recentRes.data!,
+        notify: false,
+      );
+    }else{
+      final notification = ResCode.getCorNotification(recentRes.resCode);
+      ToastHelper.showToaster(notification);
+    }
     // 获取推荐书籍
+    // 先用本地数据库中的数据渲染页面，不至于推荐专栏一片空白
     final recoRes = await bookInfoRep.getRecoBooks(
       offset: 0,
       num: AppTransactionParam.recommendBookHomeNum,
+      dataSource: DataSource.DB_FIRST,
     );
     if(recoRes.resCode==ResCode.SUCCESS){
       contentProv.setRecoBooksWithBookInfo(
@@ -39,18 +57,39 @@ class ContentHandler{
       final notification = ResCode.getCorNotification(recoRes.resCode);
       ToastHelper.showToaster(notification);
     }
+    // 网络
+    //EasyLoading.show(status: 'loading...');
+    final netRecoRes = await bookInfoRep.getRecoBooks(
+      offset: 0,
+      num: AppTransactionParam.recommendBookHomeNum,
+      dataSource: DataSource.ONLY_NET,
+    );
+    //EasyLoading.dismiss();
+    if(netRecoRes.resCode==ResCode.SUCCESS){
+      contentProv.setRecoBooksWithBookInfo(
+        netRecoRes.data!,
+        notify: true,
+      );
+    }else{
+      final notification = ResCode.getCorNotification(netRecoRes.resCode);
+      ToastHelper.showToaster(notification);
+    }
   }
-  /*-------------------书籍详情---------------------------------*/
+  /*-------------------------书籍详情-----------------------------*/
   // 初始化book详情内容
   static Future<void> browseDetail(BookInfo info)async{
+    EasyLoading.show(status: 'loading...');
     // bookInfo已经有了，现在需要获取owner信息
     Book book=Book(bookInfo: info);
     Result<List<Owner>> ownerRes=await bookInfoRep.getBookOwners(info.isbn);
+    EasyLoading.dismiss();
     if(ownerRes.resCode==ResCode.SUCCESS){
-      book.owners=ownerRes.data!;
+      book.owners = ownerRes.data!;
       contentProv.setNowBook(book);
       // 进入详情页面
       NavigationHelper.pushNamed(RouteCollector.book_detail);
+      // 到这一步才能算用户真的“浏览过了”
+      historyRecordRep.saveRecentBrowsedBook(info);
     }else{
       final notification = ResCode.getCorNotification(ownerRes.resCode);
       ToastHelper.showToaster(notification);
@@ -206,5 +245,23 @@ class ContentHandler{
       ToastHelper.showToaster(notification);
     }
   }
-  /*-------------------其他-------------------------------------*/
+  /*-------------------排行榜-------------------------------*/
+  static Future<void> initTrendingBooks() async{
+    // loading
+    // 获取书籍数据
+    Result<List<BookInfo>> bookRes=await bookInfoRep.getRecoBooks(
+      offset: 301,
+      num: 10,
+      dataSource: DataSource.ONLY_NET,
+    );
+    if(bookRes.resCode==ResCode.SUCCESS){
+      contentProv.setTrendingBooks(
+        bookRes.data!,
+        notify: true,
+      );
+    }else{
+      final notification = ResCode.getCorNotification(bookRes.resCode);
+      ToastHelper.showToaster(notification);
+    }
+  }
 }

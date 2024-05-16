@@ -116,10 +116,10 @@ class _CategoryBookState extends State<CategoryBook>{
               thickness: 0.8,
             ),
           ),
-          Selector<CategoryProv,Tuple2<int,DataEnum>>(
-            selector: (_, prov) => prov.nowLenAndStatus,
-            builder: (context,lenAndStatus,_) {
-              if(lenAndStatus.item1==0 && lenAndStatus.item2 != DataEnum.LOADING){
+          Selector<CategoryProv,Tuple2<String,DataEnum>>(
+            selector: (_, prov) => prov.nowListAndStatus,
+            builder: (context,nowlistAndStatus,_) {
+              if(_cprov.cate12Books.isEmpty && _cprov.dataEnum != DataEnum.LOADING){
                 return Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,13 +146,13 @@ class _CategoryBookState extends State<CategoryBook>{
                 );
               }
               return Expanded(
-                child: Selector<CategoryProv, Tuple2<int,DataEnum>>(
-                  selector: (_, prov) => prov.nowLenAndStatus,
-                  builder: (context, lenAndStatus, _) => ListView.builder(
+                child: Selector<CategoryProv, Tuple2<String,DataEnum>>(
+                  selector: (_, prov) => prov.nowListAndStatus,
+                  builder: (context, listAndStatus, _) => ListView.builder(
                     controller: _scrollController,
-                    itemCount: lenAndStatus.item1 + 1,//加一个用于显示loading或者没有更多或者重试
+                    itemCount: _cprov.cate12Books.length + 1,//加一个用于显示loading或者没有更多或者重试
                     itemBuilder: (BuildContext context, int index) {
-                      if(index==lenAndStatus.item1){
+                      if(index==_cprov.cate12Books.length){
                         if(_cprov.dataEnum==DataEnum.LOADING) return const Center(child: CircularProgressIndicator());
                         if(_cprov.dataEnum==DataEnum.NO_MORE) return const Center(child: Text('没有更多了'));
                         if(_cprov.dataEnum==DataEnum.ERROR) {
@@ -174,6 +174,7 @@ class _CategoryBookState extends State<CategoryBook>{
                         return nil;
                       }
                       return ImageTile(
+                        key: ValueKey(_cprov.cate12Books[index].isbn),
                         padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                         title: _cprov.cate12Books[index].title,
                         subTitle: _cprov.cate12Books[index].authorNamesStr,
@@ -207,7 +208,7 @@ class _CategoryBookState extends State<CategoryBook>{
                           backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                         ),
                         titleWeight: FontWeight.w500,
-                        onTap: () {},
+                        onTap: ()=>_onTapATile(index),
                         fontSize: 18,
                         fontSize3: 13,
                       );
@@ -224,5 +225,9 @@ class _CategoryBookState extends State<CategoryBook>{
 
   void _onTapCategory2(int cateCode){
     ContentHandler.changeCategory2(newCate2: cateCode);
+  }
+  void _onTapATile(int index){
+    // 这里index就是CategoryProv中的cate12Books的index,
+    ContentHandler.browseDetail(_cprov.cate12Books[index]);
   }
 }

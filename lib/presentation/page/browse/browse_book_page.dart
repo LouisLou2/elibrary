@@ -4,9 +4,11 @@ import 'package:elibrary/presentation/widget/gradient_image_card.dart';
 import 'package:elibrary/presentation/widget/section_window.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:elibrary/state_management/prov/category_prov.dart';
+import 'package:elibrary/state_management/prov/content_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
 import 'package:elibrary/usecase/handler/content_handler.dart';
+import 'package:elibrary/usecase/handler/search_handler.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class BrowseBookPage extends StatefulWidget {
 class _BrowseBookPageState extends State<BrowseBookPage> {
 
   final CategoryProv _cprov = ProvManager.categoryProv;
+  final ContentProv _coprov = ProvManager.contentProv;
   late SearchController _searchController;
   late FocusNode _focusNode;
 
@@ -36,6 +39,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
     _searchController = SearchController();
     _focusNode = FocusNode();
     super.initState();
+    ContentHandler.initTrendingBooks();
   }
 
   @override
@@ -59,7 +63,9 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                   Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
                     child: IconButton(
-                      onPressed: null,
+                      onPressed:  (){
+                        NavigationHelper.pushNamed(RouteCollector.notification_page);
+                      },
                       icon: Icon(
                         Icons.notifications_active_outlined,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -110,7 +116,7 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
                       ),
                     ),
                     onTap: (){
-                      Navigator.of(context).pushNamed('/search');
+                      SearchHandler.enterSearchPage();
                       _focusNode.unfocus();
                     },
                     leading: const Icon(Icons.search),
@@ -163,32 +169,39 @@ class _BrowseBookPageState extends State<BrowseBookPage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 0),
-                child:Column(
-                  children: ListExtension.separate<Widget>(
-                    len: 6,
-                    generator: (index)=>ImageTile(
-                      onTap: ()=>Navigator.of(context).pushNamed('/book_detail'),
-                      title: 'Dart Apprentice',
-                      subTitle: 'Leo Dion, Peter Friese',
-                      thirdTitle: 'Programming',
-                      subtitleColor: Theme.of(context).colorScheme.primary,
-                      image: Image.network(
-                        'https://m.media-amazon.com/images/I/61KQ4EoU3IS._SL1360_.jpg',
-                        fit: BoxFit.cover,
-                        width: AppRepreConst.mediumBookW.w,
-                        height: AppRepreConst.mediumBookW.w * AppRepreConst.bookCoverRatio,
+                child: Selector<ContentProv,String>(
+                  selector: (_,prov)=>prov.trendingBookKey,
+                  builder: (_,strKey,__)=> Column(
+                    children: ListExtension.separate<Widget>(
+                      len: _coprov.trendingBooks.length,
+                      generator: (index)=> ImageTile(
+                        onTap: (){
+                          ContentHandler.browseDetail(_coprov.trendingBooks[index]);
+                        },
+                        title: _coprov.trendingBooks[index].title,
+                        subTitle: _coprov.trendingBooks[index].authorNamesStr,
+                        thirdTitle: _coprov.trendingBooks[index].cate1Str,
+                        subtitleColor: Theme.of(context).colorScheme.primary,
+                        image: Hero(
+                          tag: _coprov.trendingBooks[index].isbn,
+                          child: getCustomCachedImage(
+                            url: _coprov.trendingBooks[index].cover_l_url??'',
+                            width: AppRepreConst.mediumBookW.w,
+                            height: AppRepreConst.mediumBookW.w * AppRepreConst.bookCoverRatio,
+                          ),
+                        ),
+                        actionWidget: null,
+                        fontSize: 20,
                       ),
-                      actionWidget: null,
-                      fontSize: 20,
-                    ),
-                    separatorGenerator: (index)=>LayoutBuilder(
-                      builder: (BuildContext context,BoxConstraints constraints){
-                        return Divider(
-                          height: UIParams.smallGap.h,
-                          indent: constraints.maxWidth * 0.3,
-                          endIndent: 20,
-                        );
-                      },
+                      separatorGenerator: (index)=>LayoutBuilder(
+                        builder: (BuildContext context,BoxConstraints constraints){
+                          return Divider(
+                            height: UIParams.smallGap.h,
+                            indent: constraints.maxWidth * 0.3,
+                            endIndent: 20,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

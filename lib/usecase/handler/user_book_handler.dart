@@ -10,6 +10,7 @@ import 'package:elibrary/respository/interface/user_book_repo.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/usecase/nav/route_collector.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../constant/rescode.dart';
@@ -106,7 +107,7 @@ class UserBookHandler{
   static void enterReservePage(Book book) async {
     reserveProv.setBook(book,notify: true);
     // reserveProv.enterPage(); 此方法会在页面的initState中调用，所以不需要在这里调用
-    NavigationHelper.pushReplacementNamed(RouteCollector.reserve);
+    NavigationHelper.pushNamed(RouteCollector.reserve);
   }
   // 预约书籍
   static void reserveBook({required BookInfo bookInfo, required int libId, required DateTime dueTime}) async {
@@ -134,13 +135,14 @@ class UserBookHandler{
       ToastHelper.showToaster(notification);
     }
   }
-
   /*-----------------record列表------------------------*/
   static void enterRecordListPage() async {
+    EasyLoading.show(status: 'loading...');
     Result<List<LendingRecord>>recordListRes= await userBookRep.getRecordList(
       offset: 0,
       num: AppTransactionParam.recordListDefSize,
     );
+    EasyLoading.dismiss();
     if(recordListRes.resCode==ResCode.SUCCESS){
       recordProv.setRecordList(recordListRes.data??[],notify: true);
       //直接先跳转会出range错误

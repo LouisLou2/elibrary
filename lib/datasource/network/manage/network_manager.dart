@@ -14,5 +14,14 @@ class NetworkManager{
     ),
   );// 懒加载
 
+  static final Dio _plainDio = Dio(
+    BaseOptions(
+      baseUrl: NetworkPathCollector.host,
+      connectTimeout: NetworkConfig.defaultTimeout,
+      receiveTimeout: NetworkConfig.defaultTimeout,
+    ),
+  );// 懒加载
+
   static Dio get normalDio=>_basicDio;
+  static Dio get plainDio=>_plainDio;
 }

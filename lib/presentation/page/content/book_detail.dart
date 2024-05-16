@@ -7,11 +7,13 @@ import 'package:elibrary/presentation/widget/beautify_widget/fliter_widget.dart'
 import 'package:elibrary/presentation/widget/box_groov.dart';
 import 'package:elibrary/presentation/widget/text_action_widget.dart';
 import 'package:elibrary/state_management/prov/content_prov.dart';
+import 'package:elibrary/usecase/handler/author_handler.dart';
 import 'package:elibrary/usecase/handler/user_book_handler.dart';
 import 'package:elibrary/usecase/handler/user_lend_handler.dart';
 import 'package:elibrary/usecase/nav/navigation_helper.dart';
 import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:elibrary/util/format_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,6 +23,7 @@ import '../../../state_management/prov_manager.dart';
 import '../../../style/ui_params.dart';
 import '../../general/general_ui_settings.dart';
 import '../../widget/Image_card_with_info.dart';
+import '../../widget/info_display/desc_bottomsheet.dart';
 
 class BookDetail extends StatefulWidget{
   const BookDetail({super.key});
@@ -166,20 +169,20 @@ class _BookDetailState extends State<BookDetail>{
               children:[
                 Align(
                   alignment: Alignment.center,
-                  child: Container(
-                    margin: EdgeInsets.only(top:35.h,bottom: 10.h),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context).shadowColor.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 10,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Hero(
-                      tag: 'bookCover',
+                  child: Hero(
+                    tag: _cprov.currentDetailBook.bookInfo.isbn,
+                    child:Container(
+                      margin: EdgeInsets.only(top:35.h,bottom: 10.h),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).shadowColor.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
                       child: ClipRRect(
                         clipBehavior: Clip.antiAlias,
                         borderRadius: BorderRadius.circular(UIParams.smallBorderR),
@@ -207,16 +210,9 @@ class _BookDetailState extends State<BookDetail>{
                   ),
                 ),
                 const SizedBox(height: UIParams.smallGap,),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    _cprov.currentDetailBook.bookInfo.authorNamesStr,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      letterSpacing: -0.7,
-                      fontSize: 18,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                getAuthorButton(
+                  ids: _cprov.currentDetailBook.bookInfo.authorIds,
+                  names: _cprov.currentDetailBook.bookInfo.authorNames,
                 ),
                 SizedBox(height: UIParams.mediumGap.h),
                 Row(
@@ -359,10 +355,10 @@ class _BookDetailState extends State<BookDetail>{
                       size: 33,
                     ),
                     Text(
-                      _cprov.currentDetailBook.bookInfo.publisher,
+                      FormatTool.trimText(_cprov.currentDetailBook.bookInfo.publisher,maxLength: 10),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        letterSpacing: -0.8,
+                        letterSpacing: -1,
                         fontSize: 13,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -405,10 +401,21 @@ class _BookDetailState extends State<BookDetail>{
                     ),
                   ),
                 ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: onTapshowDescButton,
+                  child: Text(
+                    '展开',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      letterSpacing: -0.8,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          SizedBox(height: UIParams.largeGap.h),
+          SizedBox(height: UIParams.mediumGap.h),
           Padding(
             padding: EdgeInsets.only(left: 20.w),
             child: Column(
@@ -558,7 +565,53 @@ class _BookDetailState extends State<BookDetail>{
       situaCode: SituationEnum.WARNING,
     );
   }
+
   void _attemptToBorrowFromUser(){
     UserLendHandler.enterUserListPage(_cprov.currentDetailBook.bookInfo);
+  }
+
+  void onTapshowDescButton(){
+    showDescBottomSheet(
+      context: context,
+      title: '书籍简介',
+      desc: _cprov.currentDetailBook.bookInfo.desc,
+      height: MediaQuery.of(context).size.height * 0.5,
+    );
+  }
+
+  Widget getAuthorButton({required List<int> ids, required List<String> names}){
+    return Align(
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: List.generate(
+            ids.length*2-1, (index){
+          if(index.isEven){
+            return CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: ()=>authorButtonTapped(ids[index~/2]),
+              child: Text(
+                names[index~/2],
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  letterSpacing: -0.7,
+                  fontSize: 18,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            );
+          }
+          return Text(
+              '/',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            );
+          }
+        ),
+      ),
+    );
+  }
+  void authorButtonTapped(int authorId){
+    AuthorHanler.enterAuthorDetail(authorId);
   }
 }

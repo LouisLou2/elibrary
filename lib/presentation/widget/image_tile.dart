@@ -63,44 +63,55 @@ class ImageTile extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title!,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: titleWeight?? FontWeight.normal,
-                    letterSpacing: -0.6,
-                    color: surfaceColor,
-                    fontSize: fontSize,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.5,
+                  child:Text(
+                    title!,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontWeight: titleWeight?? FontWeight.normal,
+                      letterSpacing: -0.6,
+                      color: surfaceColor,
+                      fontSize: fontSize,
+                    ),
                   ),
                 ),
                 if(subTitle!=null)
-                  Text(
-                    subTitle!,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
-                      fontSize: fontSize!=null?fontSize!*0.8:null,
-                      letterSpacing: -0.6,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: Text(
+                      subTitle!,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(
+                        color: subtitleColor ?? Theme.of(context).colorScheme.secondary,
+                        fontSize: fontSize!=null?fontSize!*0.8:null,
+                        letterSpacing: -0.6,
+                      ),
                     ),
                   ),
                 if(thirdTitle!=null)
-                  Text(
-                    thirdTitle!,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: fontSize3??(fontSize!=null?fontSize!*0.6:null),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: Text(
+                      thirdTitle!,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: fontSize3??(fontSize!=null?fontSize!*0.6:null),
+                      ),
                     ),
                   ),
               ],
             ),
             if(actionWidget!=null)
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: actionWidget,
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: actionWidget,
+                ),
               ),
-            ),
           ],
         ),
       ),

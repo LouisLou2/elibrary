@@ -13,8 +13,8 @@ class ResCode{
   // 841-860用于网络请求
   static const int USER_CANCELED=1001; //用户取消了请求
   static const int REQUEST_TIME_OUT=1002; //请求超时
-  static const int REQUEST_ERROR=1002; //请求错误
-  static const int CANNOT_CONNECT=1003; //无法连接到服务器
+  static const int REQUEST_ERROR=1003; //请求错误
+  static const int CANNOT_CONNECT=1004; //无法连接到服务器
   // 861-880用于文件与数据库操作
   static const int DB_DATA_NOT_EXIST=861; //数据库中未找到该数据,
   static const int FILE_NOT_EXIST=862; //文件不存在
@@ -41,6 +41,11 @@ class ResCode{
   static const int USER_LOGIN_EXPIRED=26; //登录过期
   static const int USER_REJECT=27; //用户被拒绝服务，此码没有原因，一般不用，具体业务会有更加详细的原因码
   static const int UER_EMAIL_CODE_UNSEND=28; //用户邮箱验证码未发送成功
+  // reserve 51-70
+  static const int RESERVE_BOOK_CONSTRAINT=51;//预约失败，可能是因为预约数量已达上限
+  static const int BOOK_RAN_OUT=52;//借阅失败，可能是因为图书已借完
+  // 数据获取 71-90
+  static const int DATA_NOT_EXIST=71;//数据不存在
 
   static const unknownNotification=AppNotification(
     situaCode: SituationEnum.ERROR,
@@ -50,125 +55,140 @@ class ResCode{
 
   static Map<int,AppNotification> resCodeMap={
     // SUCCESS
-    SUCCESS: AppNotification(
+    SUCCESS: const AppNotification(
       situaCode: SituationEnum.SUCCESS,
       title: '成功',
     ),
     // CLIENT
-    DEBUG_ERROR:AppNotification(
+    DEBUG_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '调试错误',
       desc: '调试错误',
     ),
-    CLIENT_LOGIN_EXPIRED: AppNotification(
+    CLIENT_LOGIN_EXPIRED: const AppNotification(
       situaCode: SituationEnum.WARNING,
       title: '登录过期',
       desc: '登录过期，请重新登录',
     ),
-    USER_CANCELED:AppNotification(
+    USER_CANCELED:const AppNotification(
       situaCode: SituationEnum.WARNING,
       title: '用户取消',
       desc: '用户取消了请求',
     ),
-    REQUEST_TIME_OUT:AppNotification(
+    REQUEST_TIME_OUT: const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '请求超时',
       desc: '请求超时',
     ),
-    REQUEST_ERROR:AppNotification(
+    REQUEST_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '请求错误',
       desc: '请求错误',
     ),
-    CANNOT_CONNECT:AppNotification(
+    CANNOT_CONNECT:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '无法连接',
       desc: '无法连接到服务器',
     ),
-    FILE_NOT_EXIST:AppNotification(
+    FILE_NOT_EXIST:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '文件不存在',
       desc: '文件不存在',
     ),
-    FILE_ERROR:AppNotification(
+    FILE_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '文件错误',
       desc: '文件读取或写入错误',
     ),
-    DB_NOT_EXIST:AppNotification(
+    DB_NOT_EXIST:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '数据库不存在',
       desc: '数据库不存在',
     ),
-    DB_ERROR:AppNotification(
+    DB_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '数据库错误',
       desc: '数据库读取或写入错误',
     ),
-    DATA_DAMAGE:AppNotification(
+    DATA_DAMAGE:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '数据损坏',
       desc: '数据损坏',
     ),
-    SERVER_ERROR:AppNotification(
+    SERVER_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '服务端错误',
       desc: '服务端内部错误',
     ),
-    SERVER_BUSY:AppNotification(
+    SERVER_BUSY:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '服务端繁忙',
       desc: '服务端繁忙',
     ),
-    SERVER_MAINTAIN:AppNotification(
+    SERVER_MAINTAIN:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '服务端维护中',
       desc: '服务端维护中',
     ),
-    REJECT_REQUEST:AppNotification(
+    REJECT_REQUEST:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '拒绝请求',
       desc: '拒绝请求',
     ),
-    USER_ALREADY_EXIST:AppNotification(
+    USER_ALREADY_EXIST:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '用户已存在',
       desc: '用户已存在',
     ),
-    USER_NOT_EXIST:AppNotification(
+    USER_NOT_EXIST:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '用户不存在',
       desc: '用户不存在',
     ),
-    USER_PWD_UNSET:AppNotification(
+    USER_PWD_UNSET:const AppNotification(
       situaCode: SituationEnum.WARNING,
       title: '用户密码未设置',
       desc: '用户密码未设置',
     ),
-    USER_PWD_ERROR:AppNotification(
+    USER_PWD_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '用户密码错误',
       desc: '用户密码错误',
     ),
-    USER_EMAIL_CODE_ERROR:AppNotification(
+    USER_EMAIL_CODE_ERROR:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '邮箱验证码错误',
       desc: '邮箱验证码错误或已经过期',
     ),
-    USER_LOGIN_EXPIRED:AppNotification(
+    USER_LOGIN_EXPIRED:const AppNotification(
       situaCode: SituationEnum.WARNING,
       title: '登录过期',
       desc: '登录过期',
     ),
-    USER_REJECT:AppNotification(
+    USER_REJECT:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '用户被拒绝',
       desc: '用户被拒绝服务',
     ),
-    UER_EMAIL_CODE_UNSEND:AppNotification(
+    UER_EMAIL_CODE_UNSEND:const AppNotification(
       situaCode: SituationEnum.ERROR,
       title: '邮箱验证码未发送',
       desc: '邮箱验证码未发送成功',
+    ),
+    RESERVE_BOOK_CONSTRAINT:const AppNotification(
+      situaCode: SituationEnum.ERROR,
+      title: '预约失败',
+      desc: '您的预约数量已达上限且仍有费用未缴清',
+    ),
+    BOOK_RAN_OUT:const AppNotification(
+      situaCode: SituationEnum.ERROR,
+      title: '借阅失败',
+      desc: '暂时无剩余图书资源',
+    ),
+    DATA_NOT_EXIST:const AppNotification(
+      situaCode: SituationEnum.ERROR,
+      title: '数据不存在',
+      desc: '数据不存在',
     ),
   };
   static AppNotification getCorNotification(int resCode){

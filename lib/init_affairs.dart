@@ -1,18 +1,20 @@
 import 'package:elibrary/config/test_device.dart';
-import 'package:elibrary/datasource/db/interface/bookinfo_db_da.dart';
+import 'package:elibrary/datasource/db/interface/bookinfo_db_ds.dart';
+import 'package:elibrary/datasource/db/interface/history_record_db_ds.dart';
 import 'package:elibrary/datasource/db/interface/message_db_ds.dart';
 import 'package:elibrary/datasource/db/interface/state_db_ds.dart';
 import 'package:elibrary/datasource/network/implement/user_lend_net_ds_imple.dart';
 import 'package:elibrary/datasource/network/implement/userbook_net_ds_imple.dart';
 import 'package:elibrary/datasource/network/interface/bookinfo_net_ds.dart';
 import 'package:elibrary/datasource/network/interface/userbook_net_ds.dart';
-import 'package:elibrary/datasource/ws/websocket_manager_depecated.dart';
 import 'package:elibrary/respository/implement/bookinfo_repo_imple.dart';
+import 'package:elibrary/respository/implement/history_record_rep_imple.dart';
 import 'package:elibrary/respository/implement/message_repo_imple.dart';
 import 'package:elibrary/respository/implement/state_repo_imple.dart';
 import 'package:elibrary/respository/implement/user_book_repo_imple.dart';
 import 'package:elibrary/respository/implement/user_lend_repo_imple.dart';
 import 'package:elibrary/respository/interface/bookinfo_repo.dart';
+import 'package:elibrary/respository/interface/history_record_repo.dart';
 import 'package:elibrary/respository/interface/message_repo.dart';
 import 'package:elibrary/respository/interface/state_repo.dart';
 import 'package:elibrary/respository/interface/user_book_repo.dart';
@@ -31,6 +33,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_it/get_it.dart';
 
 import 'datasource/db/implement/bookinfo_db_ds_imple.dart';
+import 'datasource/db/implement/history_record_db_ds_imple.dart';
 import 'datasource/db/implement/message_db_ds_imple.dart';
 import 'datasource/db/implement/state_db_ds_imple.dart';
 import 'datasource/db/manage/db_manager.dart';
@@ -79,6 +82,7 @@ Future<void> initInjection() async {
   GetIt.I.registerLazySingleton<StateDbDs>(()=>StateDbDsImple());
   GetIt.I.registerLazySingleton<BookInfoDbDs>(()=>BookInfoDbDsImple());
   GetIt.I.registerLazySingleton<MessageDbDs>(()=>MessageDbDsImple());
+  GetIt.I.registerLazySingleton<HistoryRecordDbDs>(()=>HistoryRecordDBDSImple());
   // network
   GetIt.I.registerLazySingleton<BookInfoNetDs>(()=>BookInfoNetDsImple());
   GetIt.I.registerLazySingleton<UserBookNetDS>(() => UserBookNetDSImple());
@@ -89,6 +93,7 @@ Future<void> initInjection() async {
   GetIt.I.registerSingleton<UserBookRep>(UserBookRepImple());
   GetIt.I.registerLazySingleton<UserLendRep>(()=>UserLendRepImple());
   GetIt.I.registerLazySingleton<MessageRep>(()=>MessageRepImple());
+  GetIt.I.registerLazySingleton<HistoryRecordRep>(()=>HistoryRecordRepImple());
   /*------------------usecase--------------------*/
   //requester
   GetIt.I.registerLazySingleton<AuthReq>(()=>AuthRequesterImple());

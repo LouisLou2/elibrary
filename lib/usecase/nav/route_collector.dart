@@ -14,6 +14,7 @@ import '../../presentation/page/auth/set_pwd_page.dart';
 import '../../presentation/page/category/category_page.dart';
 import '../../presentation/page/content/author_page.dart';
 import '../../presentation/page/content/book_detail.dart';
+import '../../presentation/page/notification_page.dart';
 import '../../presentation/page/onboarding_page.dart';
 import '../../presentation/page/record/record_page.dart';
 import '../../presentation/page/user_lending/chat_page.dart';
@@ -47,6 +48,8 @@ class RouteCollector {
   static const String category = '/category';
   static const String category_book = '/category_book';
 
+  static const String notification_page = '/notification_page';
+
   static const Set<String> simpleRoutes = {
     onboarding,
     main_page,
@@ -73,6 +76,8 @@ class RouteCollector {
     search,
     category,
     category_book,
+
+    notification_page,
   };
 
   // specialRoutes中的路由不会在路由表中注册，而是在RouteGenerator中动态生成,因为这些路由需要用户满足某种条件才能跳转
@@ -106,6 +111,8 @@ class RouteCollector {
     search: (context) => const SearchPage(),
     category: (context) => const CategoryPage(),
     category_book: (context) => const CategoryBook(),
+
+    notification_page: (context) => const NotificationPage(),
   };
   // {
   // '/book_detail':(context)=>const BookDetail(),

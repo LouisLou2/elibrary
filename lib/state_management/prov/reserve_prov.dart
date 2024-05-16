@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entity/book.dart';
 
+// this class contains bugs
 class ReserveProv with ChangeNotifier {
   /*
   * 虽说这个是Provider， 但是除了这里的时间变化会引起UI变化，
@@ -65,6 +66,9 @@ class ReserveProv with ChangeNotifier {
     if(notify) notifyListeners();
   }
 
+  void changeChosenDate(int days){
+    addDays = days;
+  }
   void setAddDays(int days){
     addDays = days;
   }

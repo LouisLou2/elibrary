@@ -1,4 +1,4 @@
-import 'package:elibrary/domain/req_model/user_book/reserve_param.dart';
+import 'package:elibrary/state_management/prov/author_prov.dart';
 import 'package:elibrary/state_management/prov/category_prov.dart';
 import 'package:elibrary/state_management/prov/chat_prov.dart';
 import 'package:elibrary/state_management/prov/content_prov.dart';
@@ -24,6 +24,7 @@ class ProvManager{
   static late ThemeProv themeProv;
 
   static late ContentProv contentProv;
+  static late AuthorProv authorProv;
 
   static late UserProv userProv;
 
@@ -45,6 +46,7 @@ class ProvManager{
       ChangeNotifierProvider.value(value: themeProv),
 
       ChangeNotifierProvider.value(value: contentProv),
+      ChangeNotifierProvider.value(value: authorProv),
 
       ChangeNotifierProvider.value(value: userProv),
 
@@ -67,6 +69,7 @@ class ProvManager{
     themeProv=ThemeProv();
 
     contentProv=ContentProv();
+    authorProv=AuthorProv();
 
     userProv=UserProv();
 

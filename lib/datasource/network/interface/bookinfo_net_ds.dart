@@ -2,6 +2,7 @@ import 'package:elibrary/domain/util_model/res_info.dart';
 
 import '../../../domain/entity/book.dart';
 import '../../../domain/entity/book_info.dart';
+import '../../../domain/resp_model/author_resp.dart';
 import '../../../domain/resp_model/book_info/search_resp.dart';
 
 abstract class BookInfoNetDs {
@@ -15,4 +16,7 @@ abstract class BookInfoNetDs {
   Future<Result<SearchResp>> search(String keyword);
 
   Future<Result<List<BookInfo>>> getBooksByCategory({required int category1, required int category2, required int offset, required int num});
+
+  Future<Result<AuthorResp>> getAuthorInfo({required int authorId, required int withBookNum});
+
 }

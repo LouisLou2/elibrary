@@ -26,8 +26,9 @@ class CategoryProv with ChangeNotifier {
 
   List<BookInfo> cate12Books = []; // 现在的一级二级组合类别下的书籍
 
+  String get nowCateBookListKey => cate12Books.map((e) => e.isbn).join(':');
   String get nowCategory1Name => BookConst.getCategory1Name(nowCategory1);
-  Tuple2<int,DataEnum> get nowLenAndStatus => Tuple2(cate12Books.length,dataEnum);
+  Tuple2<String,DataEnum> get nowListAndStatus => Tuple2(nowCateBookListKey,dataEnum);
 
   void setNowCategory1(int id,{bool notify=true}){
     // 仅仅设置一级类别，cate12Books没有变化

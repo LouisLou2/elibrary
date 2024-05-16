@@ -5,6 +5,7 @@ import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/state_management/prov/search_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
+import 'package:elibrary/usecase/handler/content_handler.dart';
 import 'package:elibrary/usecase/handler/search_handler.dart';
 import 'package:elibrary/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,9 +15,9 @@ import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/app_strings.dart';
+import '../../../domain/entity/book_info.dart';
 import '../../widget/image_tile.dart';
 enum Condition { all, book, author, publisher }
-
 
 
 
@@ -29,16 +30,18 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   
   Condition calendarView = Condition.all;
-
   final SearchProv _sprov = ProvManager.searchProv;
   Timer? _searchThrottleTimer;
+  late SearchController _searchController;
 
   @override
   void initState() {
+    _searchController = SearchController();
     super.initState();
   }
   @override
   void dispose(){
+    _searchController.dispose();
     if(_searchThrottleTimer!=null){
       _searchThrottleTimer!.cancel();
     }
@@ -60,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Hero(
                   tag: 'browsePage:searchBar',
                   child: SearchBar(
+                    controller: _searchController,
                     autoFocus: true,
                     hintText: '搜索书名, 作者, 出版社',
                     hintStyle: Theme.of(context).textTheme.titleSmall!=null? MaterialStatePropertyAll<TextStyle>(
@@ -89,12 +93,10 @@ class _SearchPageState extends State<SearchPage> {
                       print('@@@@@@@@@@@@onTap');
                     },
                     onChanged: (value){
-                      // TODO: 未做防抖处理
+                      // 防抖处理
                       _searchThrottle(value);
                     },
-                    onSubmitted: (String u){
-                        print('@@@@@@@@@@@@onSubmitted');
-                    },
+                    onSubmitted: SearchHandler.onSubmitted,
                     leading: const Icon(Icons.search),
                     trailing: <Widget>[
                       Tooltip(
@@ -143,7 +145,9 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             TextButton(
-              onPressed: null,
+              onPressed: (){
+                SearchHandler.clearSearchKeywords();
+              },
               child: Text(
                 '清空',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -153,21 +157,35 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ),
-        Wrap(
-          spacing: 6,
-          runSpacing: -8,
-          children: List.generate(5, (index) => Chip(
-            label: Text(
-              'History $index',
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-                letterSpacing: -0.7,
-               ),
+        Selector<SearchProv,String>(
+          selector: (_,prov)=>prov.searchKeywordKey,
+          builder: (_,searchKeywordKey,__) {
+            return Wrap(
+            spacing: 6,
+            runSpacing: -8,
+            children: List.generate(_sprov.searchKeywords.length, (index) =>
+                ActionChip(
+                  key: ValueKey(_sprov.searchKeywords[index]),
+                  onPressed: (){
+                    _searchController.text = _sprov.searchKeywords[index];
+                    SearchHandler.onSubmitted(
+                      _sprov.searchKeywords[index],
+                      replaceBarText: true,
+                    );
+                  },
+                  label: Text(
+                    _sprov.searchKeywords[index],
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      letterSpacing: -0.7,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
@@ -328,10 +346,13 @@ class _SearchPageState extends State<SearchPage> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ImageTile(
                     backgroundColor: Theme.of(context).colorScheme.background,
-                    image:getCustomCachedImage(
-                      url: _sprov.books[index].cover_l_url,
-                      width: AppRepreConst.tinyBookW.w,
-                      height: AppRepreConst.tinyBookW.w * AppRepreConst.bookCoverRatio,
+                    image: Hero(
+                      tag: _sprov.books[index].isbn,
+                      child:getCustomCachedImage(
+                        url: _sprov.books[index].cover_l_url,
+                        width: AppRepreConst.tinyBookW.w,
+                        height: AppRepreConst.tinyBookW.w * AppRepreConst.bookCoverRatio,
+                      ),
                     ),
                     title: _sprov.books[index].title,
                     fontSize: Theme.of(context).textTheme.titleMedium?.fontSize,
@@ -339,7 +360,9 @@ class _SearchPageState extends State<SearchPage> {
                     subTitle: '作者 | ${_sprov.books[index].authorNamesStr}',
                     thirdTitle: _sprov.books[index].publisher,
                     fontSize3: Theme.of(context).textTheme.bodySmall?.fontSize,
-                    onTap: (){},
+                    onTap: (){
+                      bookTileOnTapped(_sprov.books[index]);
+                    },
                     actionWidget: Icon(
                       CupertinoIcons.forward,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -352,6 +375,11 @@ class _SearchPageState extends State<SearchPage> {
       ],
     );
   }
+
+  void bookTileOnTapped(BookInfo bookInfo){
+    ContentHandler.browseDetail(bookInfo);
+  }
+
   Widget _getSegmentedItem(String title){
     return Text(
       title,

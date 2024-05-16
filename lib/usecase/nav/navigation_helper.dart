@@ -1,11 +1,14 @@
 import 'package:elibrary/usecase/nav/route_collector.dart';
 import 'package:flutter/material.dart';
 
+import 'navigation_observer.dart';
+
 class NavigationHelper{
   const NavigationHelper._();
   // 此类不应该被实例化
   static final _key = GlobalKey<NavigatorState>();
   static GlobalKey<NavigatorState> get key =>_key;
+  static final observer = MyObserver();
 
   static Future<T?>? pushNamed<T extends Object>(String routeName,{Object? arguments,}){
     return _key.currentState?.pushNamed<T?>(

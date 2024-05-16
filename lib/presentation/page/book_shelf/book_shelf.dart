@@ -1,8 +1,8 @@
 import 'package:barcode_scan2/gen/protos/protos.pb.dart';
 import 'package:barcode_scan2/model/scan_options.dart';
 import 'package:barcode_scan2/platform_wrapper.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elibrary/presentation/page/book_shelf/add_book_confirm_page.dart';
+import 'package:elibrary/presentation/specific_style_widget/image_widget.dart';
 import 'package:elibrary/state_management/prov/book_shelf_prov.dart';
 import 'package:elibrary/state_management/prov_manager.dart';
 import 'package:elibrary/style/ui_params.dart';
@@ -20,7 +20,7 @@ import '../../widget/custom_image_card.dart';
 import '../../widget/info_display/headline2.dart';
 
 class BookShelf extends StatefulWidget {
-  BookShelf({super.key});
+  const BookShelf({super.key});
 
   @override
   State<BookShelf> createState() => _BookShelfState();
@@ -142,7 +142,6 @@ class _BookShelfState extends State<BookShelf> {
                 height: 8,
                 thickness: 1.5,
                 indent: 20,
-                endIndent: 20,
               ),
               const SizedBox(height: 10,),
               Expanded(
@@ -185,15 +184,10 @@ class _BookShelfState extends State<BookShelf> {
                             ],
                             child: CustomImageCard(
                               key: ValueKey<String>(_uprov.bookShelf[index].isbn),// 用isbn作为key, 以提高刷新性能
-                              image: CachedNetworkImage(
-                                imageUrl: _uprov.bookShelf[index].cover_url,
-                                fit: BoxFit.cover,
-                                width: 220.w,
-                                height: 277.w,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              image: getCustomCachedImage(
+                                url: _uprov.bookShelf[index].cover_url,
+                                width: 210.w,
+                                height: 300.w,
                               ),
                               text: _uprov.bookShelf[index].title,
                               //useSolidColor: true,
